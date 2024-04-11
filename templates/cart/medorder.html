@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=
+    , initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    orderform
+    <form method="post" class="myform">
+        {% csrf_token %}
+      
+        <div class="mb-4 row">
+          <label class="form-label col-sm-2">Address</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="address" placeholder="Enter address">
+          </div>
+        </div>
+      
+      
+        <div class="mb-4 row">
+          <label class="form-label col-sm-2">Phone</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="phone" placeholder="Enter phone">
+          </div>
+        </div>
+      
+      <a href="{% url 'payment' %}">Pay Now</a>
+      </form>
+
+</body>
+</html>

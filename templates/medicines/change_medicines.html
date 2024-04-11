@@ -1,0 +1,68 @@
+{% extends 'medicine_base.html' %}
+{% block content %}
+    <style>
+        /* CSS styles for the form */
+        .container{
+            margin-top: 50px;
+            margin-bottom: 50px;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: aliceblue;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 50px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box; /* Ensure padding and border are included in element's total width/height */
+        }
+
+        input[type="file"] {
+            margin-bottom: 15px;
+        }
+
+        .btn.btn-primary{
+            background-color:#51eaea ;
+            border-color: #51eaea;
+            color: black;
+        }
+
+   .btn.btn-primary:hover {
+    background: transparent;
+    color: #51eaea; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form.as_p}}
+        <center>
+        <button type="submit" class="btn btn-primary">Change</button> 
+    </center>
+    </form>
+</div>
+{% endblock %}

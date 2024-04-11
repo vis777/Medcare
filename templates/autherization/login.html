@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+  <title>CareLink</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link href="https://fonts.googleapis.com/css?family=Rubik:400,700|Crimson+Text:400,400i" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'fonts/icomoon/style.css' %}">
+
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+  <link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}">
+  <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+
+
+  <link rel="stylesheet" href="{% static 'css/aos.css' %}">
+
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <script src="https://kit.fontawesome.com/234803766d.js" crossorigin="anonymous"></script>
+  <style>
+    /* body {
+        background-image: url("{% static 'images/medicine_background.jpg' %}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+      
+    } */
+     /* body {
+            height: 100vh;
+            background-color: #062ffc;
+            background-image: linear-gradient(43deg, #062dece0 0%, #f5f0f5 46%, #0a21f2 100%);
+
+        } */
+
+        .section {
+            margin-top: 10px;
+            width: 50%;
+            height: 70%;
+
+        }
+
+
+
+        .btn-grad {
+            background-image: linear-gradient(to right, #007bff 0%, #51eaea 51%, #51eaea 100%);
+            margin: 10px;
+            padding: 10px 45px;
+            text-align: center;
+            text-transform: uppercase;
+            transition: 0.5s;
+            background-size: 200% auto;
+            color: white;
+            box-shadow: 0 0 20px #eee;
+            border-radius: 10px;
+            display: block;
+        }
+
+        .btn-grad:hover {
+            background-position: right center;
+            
+            color: #fff;
+            text-decoration: none;
+        }
+  </style>
+</head>
+
+<body>
+
+  <div class="site-wrap">
+
+
+    <div class="site-navbar py-2">
+
+      <div class="search-wrap">
+        <div class="container">
+          <a href="#" class="search-close js-search-close"><span class="icon-close2"></span></a>
+          <form action="#" method="post">
+            <input type="text" class="form-control" placeholder="Search keyword and hit enter...">
+          </form>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="logo">
+            <div class="site-logo">
+              <a href="{% url 'index' %}" class="js-logo-clone"><img src="{% static 'images\carelink-high-resolution-logo-transparent.png' %}" style="width: 150px;height: 100px;"></a>
+            </div>
+          </div>
+          <div class="main-nav d-none d-lg-block">
+            <nav class="site-navigation text-right text-md-center" role="navigation">
+              <ul class="site-menu js-clone-nav d-none d-lg-block" style="margin-right: 300px;">
+                <li class="active"><a href="{% url 'index' %}">Home</a></li>
+                <li class="has-children">
+                  <a href="#">Store</a>
+                  <ul class="dropdown">
+                    <li><a href="{% url 'listmedicines' %}">Medicines</a></li>
+                    <li><a href="{% url 'device_page' %}">Clinical Devices</a></li>
+                
+                </ul>
+              </li>
+              <!-- <li class="has-children">
+                <a href="#">Services</a>
+                <ul class="dropdown">
+                  <li><a href="{% url 'approved_nurses_list' %}">Home nurse</a></li>
+                  <li><a href="{% url 'devicepanel' %}">Be a Seller?</a></li>
+              
+              </ul>
+            </li> -->
+                <!-- <li class="has-children">
+                  <a href="#">Registrations</a>
+                  <ul class="dropdown">
+                    <li><a href="#">Customer</a></li>
+                    <li><a href="#">Nurse</a></li>
+                    <li><a href="#">Medical store</a></li>
+                    
+                  </ul>
+                </li> -->
+                <li><a href="{% url 'aboutus' %}">About</a></li>
+                <li><a href=""><i class="fa-solid fa-user"></i> {{ request.user.username }}</a></li>
+                <!-- <li><a href="contact.html">Contact</a></li> -->
+                <!-- <li><a href="{% url 'login' %}">Login</a></li> -->
+              </ul>
+            </nav>
+          </div>
+          <!-- <div class="icons">
+            <a href="#" class="icons-btn d-inline-block js-search-open"><span class="icon-search"></span></a>
+            <a href="cart.html" class="icons-btn d-inline-block bag">
+              <span class="icon-shopping-bag"></span>
+              <span class="number">2</span>
+            </a>
+            <a href="#" class="site-menu-toggle js-menu-toggle ml-3 d-inline-block d-lg-none"><span
+                class="icon-menu"></span></a>
+          </div> -->
+        </div>
+      </div>
+    </div>
+</div>
+
+
+{%if messages%}
+<div class="container d-flex justify-content-center">
+    <div class="w-50" style="height: 100px;">
+        <div>
+            {%for m in messages%}
+            {%if m.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>{{request.user}}!</strong> {{m}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {%endif%}
+            {%endfor%}
+        </div>
+    </div>
+</div>
+{%endif%}
+
+<div class="container h-100 d-flex justify-content-center align-items-center">
+
+
+
+    <div class="section rounded-3 bg-white p-5 shadow" style="width: 60%;  margin-top: 30px;">
+        <div class="text-center mb-5">
+            <h1 class="fw-bolder">Login</h1>
+        </div>
+        <form action="" method="post">
+            {%csrf_token%}
+            <div class="mb-4">
+                <label for="" class="form-label">username</label>
+                <input type="text" placeholder="Type your username"
+                    class="form-control border border-start-0 border-top-0 border-end-0" name="username">
+            </div>
+            <div class="mb-4">
+                <label for="" class="form-label">password</label>
+                <input type="password" placeholder="Type your password"
+                    class="form-control border border-start-0 border-top-0 border-end-0" name="password">
+            </div>
+          
+            <div>
+                <button class="form-control btn-grad rounded-pill" type="submit">Login</button>
+            </div>
+
+            <div class="social-auth d-flex flex-column align-items-center">
+
+                <div>
+                    <a href="{% url 'admin_login' %}">Is admin?</a>
+
+                </div>
+
+                <div>
+                    <a href="{% url 'forgot_password' %}">Lost your Password?</a>
+                    
+                </div>
+
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+</div>
+
+<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'js/jquery-ui.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/owl.carousel.min.js' %}"></script>
+<script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+<script src="{% static 'js/aos.js' %}"></script>
+
+<script src="{% static 'js/main.js' %}"></script>
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

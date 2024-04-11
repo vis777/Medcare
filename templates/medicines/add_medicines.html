@@ -1,0 +1,99 @@
+{% extends 'medicine_base.html' %}
+{% block content %}
+
+
+
+ 
+<style>
+        /* body {
+            padding: 20px;
+            
+        } */
+        .form-container {
+            
+            max-width: 600px;
+            margin: auto;
+        }
+        .form-container form {
+            padding: 20px;
+            border: 1px solid #bcc8f3;
+            border-radius: 5px;
+            background-color: aliceblue;
+            
+        }
+        .form-container input[type="text"],
+        .form-container input[type="date"] {
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        .form-container label {
+            font-weight: bold;
+        }
+        .btn.btn-primary{
+            background-color:#51eaea ;
+            border-color: #51eaea;
+            color: black;
+            width: 200px;
+            
+            
+        }
+
+   .btn.btn-primary:hover {
+    background: transparent;
+    color: #51eaea;
+    border-color: #51eaea;
+   }
+    </style>
+
+
+    <div class="form-container">
+        <form action="" method="post"  enctype="multipart/form-data" class="mt-5 mb-5">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id__medicine_name">MedicineName:</label>
+                <input type="text" id="id_medicine_name" name="medicine_name" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="id_expiry_date">Expiry Date:</label>
+                <input type="date" id="id_expiry_date" name="expiry_date" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="id__manufacturer">Manufacturer</label>
+                <input type="text" id="id__manufacturer" name="manufacturer" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="id__manufacturer">Quantityavailble</label>
+                <input type="text" id="id__quantity_availble" name="quanity_availble" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="id__manufacturer">Price</label>
+                <input type="text" id="id__price" name="price" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="id_image">Image</label>
+                <input type="file" id="id_image" name="image" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="id_category">Category:</label>
+                <select name="category">
+                    <option value="">Select Category</option>
+                    {% for category in categories %}
+                        <option value="{{ category.pk }}">{{ category.category_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <center>
+            <input type="submit" value="Add Medicine" class="btn btn-primary mt-3 mb-3">
+        </center>
+        </form>
+    </div>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+
+
+
+
+
+{%endblock%}

@@ -1,0 +1,85 @@
+{% extends 'base2.html' %}
+{% block content %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: aliceblue;
+        }
+        h2{
+            margin-bottom: 30px;
+        }
+        .form-container {
+            margin-left: -180px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+            margin-left: 200px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="date"] {
+            padding: 10px;
+            width: 60%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            margin-top: 5px;
+        }
+        .btn.btn-primary{
+            background-color:#51eaea ;
+            border-color: #51eaea;
+            color: black;
+            margin-top: 30px;
+            
+        }
+
+   .btn.btn-primary:hover {
+    background: transparent;
+    color: #51eaea;
+    border-color: #51eaea;
+   }
+        .error-message {
+            color: #dc3545;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-md-8 offset-md-3">
+                <div class="form-container">
+                    <center>
+                    <h2>Booking Form</h2>
+                </center>
+                    <form method="post">
+                        {% csrf_token %}
+                        <!-- <div class="form-group">
+                            <label for="id_nurse">Nurse</label>
+                            {{ form.nurse }}
+                            <small class="error-message">{{ form.errors.nurse }}</small>
+                        </div> -->
+                        <div class="form-group">
+                            <label for="id_date">Date</label>
+                            <input type="date" id="id_date" name="date" class="form-control">
+                            <small class="error-message">{{ form.errors.date }}</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="id_duration">Duration</label>
+                            {{ form.duration }} months
+                            <small class="error-message">{{ form.errors.duration }}</small>
+                        </div>
+                        <center>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </center>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

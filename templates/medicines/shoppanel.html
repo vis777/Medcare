@@ -1,0 +1,64 @@
+{% extends 'Medicine_base.html' %}
+{% block content %}
+
+<style>
+   .fa-solid.fa-pen-to-square{
+    color: rgb(89, 199, 89);
+   }
+   .fa-solid.fa-trash{
+    color: red;
+   }
+</style>
+    <!-- {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %} -->
+    
+    <div class="container">
+        <table class="table table-hover mt-5 mb-5">
+            <thead>
+                <tr class="table-active">
+                    <th>Medicine Name</th>
+                    <th>Price</th>
+                    <th>Manufacturer</th>
+                    <th>Expiry Date</th>
+                    <th>Quantity Available</th>
+                    <th>Category</th>
+                    <th>Image</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for medicine in medicines %}
+                <tr>
+                    <td>{{ medicine.medicine_name }}</td>
+                    <td>{{ medicine.price }}</td>
+                    <td>{{ medicine.manufacturer }}</td>
+                    <td>{{ medicine.expiry_date }}</td>
+                    <td>{{ medicine.quanity_availble }}</td>
+                    <td>
+                       
+                          
+                        {% if medicine.category %}
+                            {{ medicine.category.category_name }}
+                        {% else %}
+                             No Category
+                         {% endif %}
+                    </td>
+                        
+                         
+                                       
+                     <td><img src="{{ medicine.image.url }}" alt="{{ medicine.medicine_name }}" style="max-width: 100px; max-height: 100px;"></td>  
+                    <td><a href="{%url 'med-change' medicine.id %}"><i class="fa-solid fa-pen-to-square"></i></a></td>
+                    <td><a href="{%url 'remove-medicines' medicine.id %}"><i class="fa-solid fa-trash"></i></a></td>        
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

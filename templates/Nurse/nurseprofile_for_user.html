@@ -1,0 +1,63 @@
+{% extends "base2.html" %}
+
+{% block content %}
+<style>
+    #available{
+        color: green;
+    }
+    #not_available{
+        color: red;
+    }
+    .container{
+        margin-top: 20px;
+    }
+    .card{
+        max-width: 75%;
+        margin-left: 100px;
+        display: flex;
+    }
+    .card-title{
+        font-weight: bold;
+        color: orangered;
+    }
+    .card img{
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+    }
+</style>
+
+
+<div class="container">
+<div class="card mb-3">
+    <div class="row g-0">
+      <div class="col-md-5">
+        {% if nurse.image %}
+        <img src="{{ nurse.image.url }}" class="card-img-top" alt="...">
+        {% endif %}     
+     </div>
+      <div class="col-md-7">
+        <div class="card-body">
+            <h5 class="card-title">{{ nurse.user.name }}</h5>
+            <p class="card-text">Email: {{ nurse.user.email }}</p>
+            <p class="card-text">License Number: {{ nurse.license_number }}</p>
+            <p class="card-text">Address: {{ nurse.address }}</p>
+            <p class="card-text">Phone: {{ nurse.phone }}</p>
+            <p class="card-text">Bio: {{ nurse.profile }}</p>
+
+            {% if nurse.is_available %}
+            <p id="available" class="card-text">Available</p>
+            {% else %}
+            <p id="not_available" class="card-text">Not available</p>
+            {% endif %}
+
+            
+                <a href="{% url 'booking' nurse.user.id %}" class="btn btn-primary">Book nurse</a>
+            
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

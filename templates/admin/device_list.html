@@ -1,0 +1,48 @@
+{% extends 'admin_base.html' %}
+{% block content %}
+      <div class="site-section">
+          <center>
+          <h1>List of Clinical devices</h1>
+        </center>
+        {% if device_list %}
+            <table align="center" class="table table-hover" style="width: 80%;">
+              <thead>
+                <tr class="table-active">
+                  <th scope="col">Seller name</th>
+                  <th scope="col">Product Name</th>
+                  <th scope="col">Product Image</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Phone</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Approve</th>
+                  
+                </tr>
+              </thead>
+              
+              <tbody>
+                {% for device in device_list %}
+              
+                <tr>
+              
+                  <td>{{device.seller_name}}</td>
+                  <td>{{device.product_name}}</td>
+                  {% if device.product_image %}
+                  <td><img src="{{device.product_image.url}}" alt="Image" style="height: 100px;width: 100px;"></td>
+                  {% endif %}
+                  <td>{{device.description}}</td>
+                  <td>{{device.phone}}</td>
+                  <td>₹{{device.price}}</td>
+                  <td><a href="{% url 'device_approval' device.id %}">approve</a></td>
+                 </tr>
+                
+              </tbody>
+              
+              
+            {% endfor %}
+            </table>
+            {% else %}
+              <p>No nurses available.</p>
+            {% endif %}
+          </div>
+    
+{% endblock %}

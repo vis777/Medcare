@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    #myForm{
+        margin-top: 30px;
+        margin-bottom: 30px;
+        width: 60%;
+        background-color: aliceblue;
+        border: 2px ridge lightblue;
+    }
+    .register-form-label {
+        font-weight: bold;
+        color: black;
+        background-color: transparent;
+      
+        text-align: right;
+        margin-bottom: 15px;
+    }
+    
+    .register-form-control {
+        
+        border-radius: 5px;
+        padding: 8px;
+        width: 100%;
+        animation: light-travel 2s infinite;
+    }
+    .form-group{
+        margin-left: 30px;
+        margin-right: 30px;
+    }
+    h1{
+        color: whitesmoke;
+    }
+</style>
+
+{% if messages %}
+    <div class="container d-flex justify-content-center">
+        <div class="w-50" style="height: 100px;">
+            <div>
+                {% for m in messages %}
+                    {% if m.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>{{ request.user }}!</strong> {{ m }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+
+
+<div class="container  mt-5 mb-5">
+    <center>
+    <h1>Sign Up</h1>
+</center>
+    <div class="d-flex justify-content-center">
+        
+    
+            <form id="myForm" method="post" class="w-75">
+                {% csrf_token %}
+                {% if form.errors %}
+                    <ul style="color: red;">
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                            {% if field.name == 'username' or field.name == 'email' or field.name == 'password1' or field.name == 'password2' or field.name == 'phone' %}                                    <li>{{ error }}</li>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <div class="form-group row mt-5">
+                    <label for="username" class="col-sm-3 col-form-label register-form-label">{{ form.username.label_tag }}</label>
+                    <div class="col-sm-9">
+                        {{ form.username }}
+                        <div id="usernameError" style="color: red;"></div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="email" class="col-sm-3 col-form-label register-form-label">{{ form.email.label_tag }}</label>
+                    <div class="col-sm-9">
+                        {{ form.email }}
+                        <div id="emailError" style="color: red;"></div>
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+                    <label for="phone" class="col-sm-3 col-form-label register-form-label">{{ form.phone.label_tag }}</label>
+                    <div class="col-sm-9">
+                        {{ form.phone }}
+                        <div id="phoneError" style="color: red;"></div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="address" class="col-sm-3 col-form-label register-form-label">{{ form.address.label_tag }}</label>
+                    <div class="col-sm-9">
+                        {{ form.address }}
+                        <div id="addressError" style="color: red;"></div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="password1" class="col-sm-3 col-form-label register-form-label">{{ form.password1.label_tag }}</label>
+                    <div class="col-sm-9">
+                        {{ form.password1 }}
+                        <div id="passwordError" style="color: red;"></div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="password2" class="col-sm-3 col-form-label register-form-label">{{ form.password2.label_tag }}</label>
+                    <div class="col-sm-9">
+                        {{ form.password2 }}
+                    </div>
+                </div>
+                <div class="text-center mb-5">
+                    <button type="submit" class="btn btn-primary">Sign Up</button>
+                </div>
+            </form>
+        </div>
+</div>
+
+<script>
+    const form = document.getElementById('myForm');
+    const usernameField = document.getElementById('id_username');
+    const emailField = document.getElementById('id_email');
+    const passwordField = document.getElementById('id_password1');
+    const confirmPasswordField = document.getElementById('id_password2');
+    const phoneField = document.getElementById('id_phone');
+    const usernameError = document.getElementById('usernameError');
+    const emailError = document.getElementById('emailError');
+    const passwordError = document.getElementById('passwordError');
+    const phoneError = document.getElementById('phoneError');
+
+    usernameField.addEventListener('input', validateUsername);
+    emailField.addEventListener('input', validateEmail);
+    passwordField.addEventListener('input', validatePassword);
+    phoneField.addEventListener('input', validatePhone);
+
+    function validateUsername() {
+        const username = usernameField.value;
+        if (username.length < 5) {
+            usernameError.textContent = 'Username must be at least 5 characters long';
+        } else {
+            usernameError.textContent = '';
+        }
+    }
+
+    function validateEmail() {
+        const email = emailField.value;
+        const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!pattern.test(email)) {
+            emailError.textContent = 'Invalid email address';
+        } else {
+            emailError.textContent = '';
+        }
+    }
+
+    function validatePassword() {
+        const password = passwordField.value;
+        if (password.length < 8) {
+            passwordError.textContent = 'Password must be at least 8 characters long';
+        } else {
+            passwordError.textContent = '';
+        }
+    }
+
+    function validatePhone() {
+        const phone = phoneField.value;
+        const pattern = /^\d{10}$/;
+        if (!pattern.test(phone)) {
+            phoneError.textContent = 'Phone number must be 10 digits';
+        } else {
+            phoneError.textContent = '';
+        }
+    }
+</script>
+
+{% endblock %}

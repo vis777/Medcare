@@ -1,0 +1,117 @@
+{% extends 'base3.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+        .alert-danger {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .total-section {
+            margin-top: 20px;
+            text-align: right;
+        }
+        .total-label {
+            font-weight: bold;
+        }
+        .btn {
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn-success {
+            background-color: #28a745;
+        }
+        .btn-primary {
+            background-color: #007bff;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% if cart %}
+            <table>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Product Image</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Delete</th>
+                </tr>
+                {% for item in cart %}
+                    <tr>
+                        <td>{{ item.device.product_name }}</td>
+                        <td>
+                            <img src="{{ item.device.product_image.url }}" alt="{{ item.device.product_name }}">
+                        </td>
+                        <td>{{ item.device.price }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td><a href="{% url 'removeitem' item.id %}" class="btn btn-danger">Delete</a></td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <div class="total-section">
+                <p class="total-label">Grant Total : {{ total }}</p>
+                <a href="{% url 'orderitem' %}" class="btn btn-success">Place Order</a>
+                <a href="{% url 'device_page' %}" class="btn btn-primary">Continue Shopping</a>
+            </div>
+        {% else %}
+            <p>Cart is empty</p>
+        {% endif %}
+    </div>
+</body>
+</html>
+{% endblock %}

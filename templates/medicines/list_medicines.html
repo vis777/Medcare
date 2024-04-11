@@ -1,0 +1,82 @@
+{% extends 'base3.html' %}
+
+{% block content %}
+
+<style>
+         /* .device-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        } */
+        .container{
+            margin-top: 30px;
+        }
+        .device-card {
+            border-radius: 2px; 
+            margin-top: 10px;
+            margin-bottom: 25px; 
+            
+        }
+        
+        .card img {
+            width: 100%;
+            height: 300px; 
+            object-fit:contain;
+        }
+        
+        .btn.btn-primary{
+            background-color:#51eaea ;
+            border-color: #51eaea;
+            color: black;
+        }
+
+   .btn.btn-primary:hover {
+    background: transparent;
+    color: #51eaea; }
+  
+    #price{
+        font-size: 15px;
+        color: rgb(16, 220, 16);
+    }
+    
+    .card-title 
+    {
+        font-size: 18px;
+        font-weight: bold;
+        white-space: nowrap; /* Prevent text wrapping */
+        overflow: hidden; /* Hide overflow text */
+        text-overflow: ellipsis; /* Add ellipsis (...) for overflow text */
+        max-width: 100%; /* Limit width to the column width */
+    } 
+    </style>
+
+    <br>
+    <div class="container">
+        <div class="row">
+            {% for medicine in medicines %}
+            <div class="col-lg-4">
+                
+            <div class="card device-card shadow">
+                {% if medicine.image %}
+                <img src="{{ medicine.image.url }}" class="card-img-top" alt="{{ medicine.medicine_name }}">
+
+                {% endif%}
+                <div class="card-body">
+                    
+                    <h5 class="card-title">{{ medicine.medicine_name }}</h5>
+                    <p id="price" class="card-text">₹{{ medicine.price }}</p>
+                    
+                    <a href="{% url 'medicine-detail' medicine.id %}" class="btn btn-primary">View Details</a>
+                    
+                </div>
+            </div>
+           
+            </div>
+            {% endfor %}
+            
+        </div>
+    </div>
+    
+
+
+{% endblock %}

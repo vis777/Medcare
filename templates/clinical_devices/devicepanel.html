@@ -1,0 +1,92 @@
+{% extends 'clinical_base.html' %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+         /* .device-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        } */
+        .container{
+            margin-top: 30px;
+        }
+        .device-card {
+            border-radius: 2px; 
+            margin-top: 10px;
+            margin-bottom: 25px; 
+            box-shadow: 0 0 2px #51eaea;
+        }
+        
+        .card img {
+            width: 100%;
+            height: 300px; 
+            object-fit:contain;
+        }
+        
+        .btn.btn-primary{
+            background-color:#51eaea ;
+            border-color: #51eaea;
+            color: black;
+        }
+
+   .btn.btn-primary:hover {
+    background: transparent;
+    color: #51eaea; }
+  
+    #price{
+        font-size: 15px;
+        color: rgb(16, 220, 16);
+    }
+    
+    .card-title 
+    {
+        font-size: 18px;
+        font-weight: bold;
+        white-space: nowrap; /* Prevent text wrapping */
+        overflow: hidden; /* Hide overflow text */
+        text-overflow: ellipsis; /* Add ellipsis (...) for overflow text */
+        max-width: 100%; /* Limit width to the column width */
+    } 
+    </style>
+</head>
+<body>
+    <br>
+    <div class="container">
+        <div class="row">
+            {% for device in device_list %}
+            <div class="col-lg-4">
+                
+            <div class="card device-card">
+                {% if device.product_image %}
+                <img src="{{ device.product_image.url }}" class="card-img-top" alt="{{device.product_name}}">
+
+                {% endif%}
+                <div class="card-body">
+                    
+                    <h5 class="card-title">{{device.product_name}}</h5>
+                    <p id="price" class="card-text">₹{{device.price}}</p>
+                    
+                    <a href="{% url 'device_details' device.id %}" class="btn btn-primary">View Details</a>
+                    
+                </div>
+            </div>
+           
+            </div>
+            {% endfor %}
+            
+        </div>
+    </div>
+    
+
+</body>
+</html>
+
+{% endblock %}

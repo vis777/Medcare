@@ -1,0 +1,124 @@
+
+{% extends 'base3.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+        .alert-danger {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .total-section {
+            margin-top: 20px;
+            text-align: right;
+        }
+        .total-label {
+            font-weight: bold;
+        }
+        .btn {
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #fff;
+            background-color: #007bff;
+            border-radius: 4px;
+        }
+        .btn-success {
+            background-color: #28a745;
+        }
+        .btn-primary {
+            background-color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% if cart %}
+            <table>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Product Image</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>actions</th>
+                    <th>Delete</th>
+                </tr>
+                {% for item in cart %}
+                    <tr>
+                        <td>{{ item.medicine.medicine_name }}</td>
+                        <td>
+                            <img src="{{ item.medicine.image.url }}" alt="{{ item.medicine.medicine_name }}">
+                        </td>
+                        <td>{{ item.medicine.price }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>
+                            <a href="{% url 'med_to_cart' item.medicine.id %}"><i class="fa-solid fa-plus" style="color:red;"></i></a> <br><br>
+                            <a href= "{% url 'itemremove' item.medicine.id %}"><i class="fa-solid fa-minus" style="color:red;"></i></i></a><br><br>
+
+                        </td>
+                        <!-- <td><a href="{% url 'remove_cart_item' item.id %}" class="btn btn-danger">Delete</a></td> -->
+                        <td>
+                        <a href="{% url 'remove_cart_item' item.id %}"><i class="fa-solid fa-trash" style="color:red;"></i></i></a></td>
+
+
+                    </tr>
+                {% endfor %}
+            </table>
+            <div class="total-section">
+                <p class="total-label">Grant Total : {{ total }}</p>
+                <a href="{%url 'medorder' %}" class="btn btn-success">Place Order</a>
+                <a href="{% url 'listmedicines' %}" class="btn btn-primary">Continue Shopping</a>
+            </div>
+        {% else %}
+            <p>Cart is empty</p>
+        {% endif %}
+    </div>
+    {%endblock%}
+</body>
+</html>

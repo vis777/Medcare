@@ -1,0 +1,80 @@
+{% extends 'nursebase.html' %}
+{% block content %}
+<style>
+    .button-container {
+    display: flex;
+    justify-content: left;
+    margin-top: 20px;
+}
+.button-container a {
+    margin: 0 10px; }
+    
+    .btn.btn-primary{
+            background-color:#23c4c4;
+            border-color:#23c4c4;
+            color: black;
+            
+        }
+
+   .btn.btn-primary:hover {
+    background: transparent;
+    color: #23c4c4;
+    border-color: #23c4c4;
+   }
+   #username{
+    margin-top: 10px;
+    /* margin-left: 120px; */
+    color: #23c4c4;
+    /* font-weight: bold; */
+    font-size: 30px;
+    font-family: fantasy;
+   }
+</style>
+<div class="container">
+{% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+    {% if nurse_profile %}
+    <div class="row mt-5 mb-5">
+        <div class="col-6">
+            {% if nurse_profile.image %}
+                <img id="profile_img" src="{{ nurse_profile.image.url }}" alt="Image" style="width: 300px; height: 300px; border-radius: 50%;">
+                
+            {% else %}
+                <p>no image</p>
+            {% endif %}
+    
+        </div>
+        <div class="col-6">
+            <p id="username">{{ nurse_profile.user.name }}</p>
+            <label for="">License No. : </label>
+            {{ nurse_profile.license_number }}
+            <br>
+            <label>Email : </label>
+            {{ user.email }}
+            <br>
+            <label>Phone : </label>
+            {{ nurse_profile.phone }}
+            <br>
+            <label>Address : </label>
+            {{ nurse_profile.address }}
+            <br>
+            <label>Bio : </label>
+            {{ nurse_profile.profile }}
+            <br>
+            <div class="button-container">
+                <a href="{% url 'changeprofile' nurse_profile.pk %}" class="btn btn-primary">Update</a>
+                <a href="{% url 'delete_nurse_profile' nurse_profile.user.id %}" class="btn btn-primary">Remove</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+
+{% endblock %}

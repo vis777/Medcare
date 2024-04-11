@@ -1,0 +1,68 @@
+{% extends 'medicine_base.html' %}
+{% block content %}
+<style>
+    .button-container {
+    display: flex;
+    justify-content: left;
+    margin-top: 20px;
+}
+.button-container a {
+    margin: 0 10px; }
+    
+    .btn.btn-primary{
+            background-color:#23c4c4;
+            border-color:#23c4c4;
+            color: black;
+            
+        }
+
+   .btn.btn-primary:hover {
+    background: transparent;
+    color: #23c4c4;
+    border-color: #23c4c4;
+   }
+   #username{
+    margin-top: 10px;
+    /* margin-left: 120px; */
+    color: #23c4c4;
+    /* font-weight: bold; */
+    font-size: 30px;
+    font-family: fantasy;
+   }
+</style>
+<div class="container">
+{% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+    
+    <div class="row mt-5 mb-5">
+        <div class="col-6">
+            
+            <label>Shop name : </label>
+            {{ shop_profile.shop_name }}
+            <br>                <br>
+                <label>Email : </label>
+                {{ request.user.email }}
+                <br>
+                <label>Phone : </label>
+                {{ shop_profile.phone }}
+                <br>
+                <label>Location : </label>
+                {{ shop_profile.location }}
+                <br>
+            
+        </div>
+        <div class="button-container">
+            <a href="{% url 'updateshop' user.id%}" class="btn btn-primary">Update</a>
+        </div>
+    </div>
+    
+</div>
+
+
+{% endblock %}

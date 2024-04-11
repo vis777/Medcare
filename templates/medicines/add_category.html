@@ -1,0 +1,102 @@
+{% extends 'medicine_base.html' %}
+{% block content %}
+
+
+
+ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        
+        .form-container {
+            
+            max-width: 480px;
+            margin:auto;
+            
+        }
+        .form-container form {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .form-container input[type="text"],
+        .form-container input[type="date"] {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .form-container label {
+            font-weight: bold;
+        }
+        .form-container input[type="submit"] {
+            width: 100%;
+        }
+        .form-control.btn-primary{
+        
+            background-color:#51eaea ;
+            border-color: #51eaea;
+            color: black;
+            
+        }
+        .table{
+            background-color:#7af2f2;
+        }
+
+   .form-control.btn-primary:hover {
+    background: transparent;
+    color: #51eaea;
+    border-color: #51eaea;
+   }
+   .fa-solid.fa-trash{
+    color: red;
+    justify-content: center;
+   }
+   
+    </style>
+</head>
+<body>
+    <div class="form-container mt-5 mb-5">
+        <form action="" method="post"  enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id__category_name">Category:</label>
+                <input type="text" id="id_category_name" name="category_name" class="form-control">
+            </div>
+            <input type="submit" value="Add" class="form-control btn-primary">
+
+        </form>
+        <div class="mt-5 w-100">
+            <table class="table table-hover">
+                <tr class="table-active">
+                    <th>CategoryName</th>
+                    <th>Action</th>
+                </tr>
+                {%for cat in categories%}
+                   <tr>
+                    <td>{{cat.category_name}}</td>
+                    <td align="center">
+                          
+                        <a href="{%url 'remove-category' cat.id%}"><i class="fa-solid fa-trash"></i></a>
+                    </td>
+            
+                   </tr>
+                {%endfor%}
+            
+            </table>
+           </div>
+        
+          </div>
+       
+       
+          
+       
+       
+       </div>
+  </body>
+  </html> 
+  {%endblock%}

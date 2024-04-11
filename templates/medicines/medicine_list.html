@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine List</title>
+</head>
+<body>
+    <h1>Medicine List</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Medicine Name</th>
+                <th>Price</th>
+                <th>Manufacturer</th>
+                <th>Expiry Date</th>
+                <th>Quantity Available</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for medicine in medicines %}
+            <tr>
+                <td>{{ medicine.medicine_name }}</td>
+                <td>{{ medicine.price }}</td>
+                <td>{{ medicine.manufacturer }}</td>
+                <td>{{ medicine.expiry_date }}</td>
+                <td>{{ medicine.quantity_available }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,68 @@
+{% extends 'clinical_base.html' %}
+
+{% block content %}
+
+<style>
+  .site-section{
+    background-color: aliceblue;
+  }
+  #table{
+    width: 90%;
+  }
+  #img{
+    width: 100%;
+    height: 200px; 
+    object-fit:contain;
+  }
+  .fa-solid.fa-pen-to-square{
+    color: rgb(89, 199, 89);
+   }
+   .fa-solid.fa-trash{
+    color: red;
+   }
+</style>
+    <div class="site-section">
+        
+        <table id="table" align="center" class="table table-hover">
+          <thead>
+            <tr class="table-active">
+              <th scope="col">Seller name</th>
+              <th scope="col">Product Name</th>
+              <th scope="col">Product Image</th>
+              <th scope="col">Description</th>
+              <th scope="col">Phone</th>
+              <th scope="col">Price</th>
+              <th scope="col">Edit</th>
+              <th scope="col">Delete</th>
+            </tr>
+          </thead>
+          
+          <tbody>
+            {% for device in device_info %}
+           
+            <tr>
+              
+              
+              <td>{{device.seller_name}}</td>
+              <td>{{device.product_name}}</td>
+              <td>
+                {% if device.product_image %}
+                <img id="img" src="{{ device.product_image.url }}" class="card-img-top" alt="{{device.product_name}}">
+
+                {% endif%}
+              </td>
+              <td>{{device.description}}</td>
+              <td>{{device.phone}}</td>
+              <td>₹{{device.price}}</td>
+              <td><a href="{% url 'device_update' device.id %}"><i class="fa-solid fa-pen-to-square"></i></a></td>
+              <td><a href="{% url 'device_delete' device.id %}"><i class="fa-solid fa-trash"></i></a></td>
+            </tr>
+            
+          </tbody>
+          
+        {% endfor %}
+        </table>
+        
+      </div>
+
+{% endblock %}

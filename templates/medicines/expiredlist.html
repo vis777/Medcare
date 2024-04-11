@@ -1,0 +1,43 @@
+{% extends 'medicine_base.html' %}
+{% block content %}
+
+
+
+    <div class="container">
+<!--         
+        {% for medicine in medicines %}
+            {{ medicine.medicine_name }} - {{ medicine.expiry_date }}
+        {% endfor %} -->
+        <table class="table table-hover mt-5 mb-5">
+            <thead>
+                <tr class="table-active">
+                    <th>Medicine Name</th>
+                    <th>Price</th>
+                    <th>Manufacturer</th>
+                    <th>Expiry Date</th>
+                    <th>Quantity Available</th>
+                    <!-- Add more columns as needed -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for medicine in medicines %}
+                <tr>
+                    <td>{{ medicine.medicine_name }}</td>
+                    <td>{{ medicine.price }}</td>
+                    <td>{{ medicine.manufacturer }}</td>
+                    <td>{{ medicine.expiry_date }}</td>
+                    <td>{{ medicine.quanity_availble }}</td>
+                    <td>
+                        <form method="POST" action="{% url 'delete-medicine' medicine.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                    <!-- Add more columns as needed -->
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{%endblock%}

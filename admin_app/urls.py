@@ -4,7 +4,15 @@ from . import views
 urlpatterns = [
     path("admin_app/device_list/", views.device_list, name="device_list"),
     path("admin_app/device_approval/<int:id>/", views.device_approval, name="device_approval"),
+    
+    # path("admin_app/device_approval/<int:id>/", views.device_approval, name="device_approval"),
+
+    # path('devices/approve/<int:id>/', views.approve_device, name='approve_device'),
+    path('devices/unapprove/<int:id>/', views.unapprove_device, name='unapprove_device'),
+    path('devices/delete/<int:id>/', views.delete_device, name='delete_device'),
 
     path("admin_app/nurse_list/", views.nurse_list, name="nurse_list"),
     path("admin_app/nurse_approval/<int:id>/", views.nurse_approval, name="nurse_approval"),
+
+    
 ]

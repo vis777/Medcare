@@ -39,28 +39,25 @@
           
           <tbody>
             {% for device in device_info %}
-           
-            <tr>
-              
-              
-              <td>{{device.seller_name}}</td>
-              <td>{{device.product_name}}</td>
-              <td>
-                {% if device.product_image %}
-                <img id="img" src="{{ device.product_image.url }}" class="card-img-top" alt="{{device.product_name}}">
-
-                {% endif%}
-              </td>
-              <td>{{device.description}}</td>
-              <td>{{device.phone}}</td>
-              <td>₹{{device.price}}</td>
-              <td><a href="{% url 'device_update' device.id %}"><i class="fa-solid fa-pen-to-square"></i></a></td>
-              <td><a href="{% url 'device_delete' device.id %}"><i class="fa-solid fa-trash"></i></a></td>
-            </tr>
-            
-          </tbody>
+<tr>
+    <td>{{ device.seller_name }}</td>
+    <td>{{ device.product_name }}</td>
+    <td>
+        {% if device.product_image %}
+            <img id="img" src="{{ device.product_image.url }}" class="card-img-top" alt="{{device.product_name}}">
+        {% endif %}
+    </td>
+    <td>{{ device.description }}</td>
+    <td>{{ device.phone }}</td>
+    <td>₹{{ device.price }}</td>
+    <td><a href="{% url 'device_update' device.id %}"><i class="fa-solid fa-pen-to-square"></i></a></td>
+    <td><a href="{% url 'device_delete' device.id %}"><i class="fa-solid fa-trash"></i></a></td>
+</tr>
+</tbody>
           
-        {% endfor %}
+{% endfor %}
+            
+          
         </table>
         
       </div>

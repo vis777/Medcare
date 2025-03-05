@@ -10,6 +10,8 @@ from django.contrib import messages
 from .models import Medcart, Medicine_inventory
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from .models import Divicecart, Order
+from autherization.models import Customer 
 
 from django.http import HttpResponseBadRequest
 
@@ -60,26 +62,68 @@ def devremove_cart_item(request, id):
     return redirect('cart_view')
 
 
-def OrderForm(request):
-    if(request.method=="POST"):
-        address=request.POST['address']
-        phone=request.POST['phone']
-        user=request.user
-        cart=Divicecart.objects.filter(user=user)
-        total=0
-        for i in cart:
-            total=total+i.quantity*i.device.price
-            obj=Order.objects.create(user=user,address=address,phone=phone,device=i.device,no_of_items=i.quantity,order_status="paid", total_price=total)
-            obj.save()
-            i.device.delete()
-        cart.delete()
-        return redirect("order_confirm_view")
+# def OrderForm(request):
+#     if(request.method=="POST"):
+#         address=request.POST['address']
+#         phone=request.POST['phone']
+#         user=request.user
+#         cart=Divicecart.objects.filter(user=user)
+#         total=0
+#         for i in cart:
+#             total=total+i.quantity*i.device.price
+#             obj=Order.objects.create(user=user,address=address,phone=phone,device=i.device,no_of_items=i.quantity,order_status="paid", total_price=total)
+#             obj.save()
+#             i.device.delete()
+#         cart.delete()
+#         return redirect("order_confirm_view")
 
-    return render(request,"cart/orderform.html")
+#     return render(request,"cart/orderform.html")
 
 
 def order_confirm_view(request):
     return render(request, "cart/order_confirm.html")
+
+
+def OrderForm(request):
+    if not request.user.is_authenticated:
+        return redirect('login')  # Make sure only logged-in users can place orders
+
+    if request.method == "POST":
+        address = request.POST.get('address')
+        phone = request.POST.get('phone')
+        user = request.user
+
+        try:
+            customer = Customer.objects.get(user=user)  # Ensure customer exists for the logged-in user
+        except Customer.DoesNotExist:
+            # Redirect or show error if customer profile doesn't exist
+            return redirect('profile_setup')  # Example URL to create profile
+
+        # Update customer address and phone if needed
+        customer.address = address
+        customer.phone = phone
+        customer.save()
+
+        cart = Divicecart.objects.filter(user=user)
+
+        total = 0
+        for item in cart:
+            total += item.quantity * item.device.price
+            Order.objects.create(
+                user=user,
+                address=address,
+                phone=phone,
+                device=item.device,
+                no_of_items=item.quantity,
+                order_status="paid",
+                total_price=item.quantity * item.device.price  # Store individual item price
+            )
+            item.device.delete()
+
+        cart.delete()
+        return redirect("order_confirm_view")
+
+    return render(request, "cart/orderform.html")
 
 
 

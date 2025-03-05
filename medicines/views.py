@@ -45,23 +45,43 @@ def remove_category(request,*args,**kwargs):
 
 
 
+# class MedicineAddView(CreateView):
+#     template_name = "medicines/add_medicines.html"
+#     form_class = AddMedicineForm
+#     success_url = reverse_lazy("shoppanel")
+
+#     def form_valid(self, form):
+#         messages.success(self.request,"medicine added successfully")
+
+#         return super().form_valid(form)
+    
+#     def form_invalid(self, form):
+#         messages.error(self.request,"medicine adding failed")
+#         return super().form_invalid(form)
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['categories'] = Medicine_Category.objects.all()
+#         return context
+
 class MedicineAddView(CreateView):
     template_name = "medicines/add_medicines.html"
     form_class = AddMedicineForm
     success_url = reverse_lazy("shoppanel")
 
     def form_valid(self, form):
-        messages.success(self.request,"medicine added successfully")
-
+        messages.success(self.request, "Medicine added successfully")
         return super().form_valid(form)
-    
+
     def form_invalid(self, form):
-        messages.error(self.request,"medicine adding failed")
+        print(form.errors)  # Debugging step
+        messages.error(self.request, "Medicine adding failed")
         return super().form_invalid(form)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = Medicine_Category.objects.all()
         return context
+
     
 
 
@@ -76,7 +96,7 @@ class MedicineListView(ListView):
 
 def medicine_list(request):
     medicines = Medicine_inventory.objects.all()
-    return render(request, 'shopanel.html', {'medicines': medicines})
+    return render(request, 'shoppanel.html', {'medicines': medicines})
 
 
 

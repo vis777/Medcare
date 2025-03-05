@@ -6,7 +6,8 @@ urlpatterns=[
     path("add/<int:id>/", add_to_cart, name="add_to_cart"),
     path("cart_view/", cart_view, name="cart_view"),
     path('cart/remove/<int:id>/', devremove_cart_item, name='removeitem'),
-    path("cart/placeprer/",OrderForm,name="orderitem"),
+    # path("cart/placeprer/",OrderForm,name="orderitem"),
+    path("cart/placeprer/", OrderForm, name="orderitem"),
     path("cart/order_confirm/", order_confirm_view, name="order_confirm_view"),
 
     path('add-to-cart/<int:id>/', medadd_to_cart, name='med_to_cart'),

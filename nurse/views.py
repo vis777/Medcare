@@ -16,7 +16,7 @@ from dateutil.relativedelta import relativedelta
 
 from django.http import HttpResponse
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from django.utils import timezone
 
 
@@ -124,51 +124,148 @@ class NurseListView(ListView):
 # 
     
 
+# class NurseDetailView(View):
+#     def get(self,request,pk):
+#         nurse_obj = Nurse.objects.get(user__id= pk)
+#         if nurse_obj.available_from and nurse_obj.available_from <= date.today():
+#             nurse_obj.is_available = True
+#             nurse_obj.available_from = None
+#             nurse_obj.save()
+#         context = {
+#             "nurse":nurse_obj
+#         }
+#         return render(request,'Nurse/nurseprofile_for_user.html',context)
+from datetime import date, timedelta
+from django.shortcuts import get_object_or_404
+
 class NurseDetailView(View):
-    def get(self,request,pk):
-        nurse_obj = Nurse.objects.get(user__id= pk)
+    def get(self, request, pk):
+        nurse_obj = get_object_or_404(Nurse, user__id=pk)
+
+        # Check the latest active booking for this nurse
+        active_booking = NurseBooking.objects.filter(nurse=nurse_obj, is_active=True).order_by('-date').first()
+
+        if active_booking:
+            booking_end_date = active_booking.date + timedelta(days=active_booking.duration * 30)
+
+            if date.today() > booking_end_date:
+                nurse_obj.is_available = True
+                nurse_obj.save()
+
+                active_booking.is_active = False
+                active_booking.save()
+            else:
+                nurse_obj.is_available = False
+                nurse_obj.save()
+        else:
+            nurse_obj.is_available = True
+            nurse_obj.save()
+
+        # Check if the logged-in user has booked this nurse
+        user_booking = NurseBooking.objects.filter(nurse=nurse_obj, user=request.user, is_active=True).first()
+
         context = {
-            "nurse":nurse_obj
+            "nurse": nurse_obj,
+            "user_booking": user_booking
         }
-        return render(request,'Nurse/nurseprofile_for_user.html',context)
+        return render(request, 'Nurse/nurseprofile_for_user.html', context)
+
     
 
 
 
 
 
+# class CreateBookingView(View):
+#     def get(self, request, pk=None):
+#         form = BookingForm()
+#         return render(request, 'Nurse/booking.html', {'form': form})
+    
+#     def post(self, request, pk=None):
+#         form = BookingForm(request.POST)
+#         if form.is_valid():
+#             date = form.cleaned_data['date']
+#             duration = form.cleaned_data['duration']
+#             user = request.user
+#             nurse = Nurse.objects.get(user__id=pk) if pk else None
+            
+#             try:
+#                 c_booking = NurseBooking.objects.filter(user=user, nurse=nurse).latest('date')
+#                 expiry_date = c_booking.date + relativedelta(days=30*duration)  
+#                 print(expiry_date,'===========')
+                
+#                 if date < expiry_date:
+#                     booking = NurseBooking.objects.create(user=user, nurse=nurse, date=date, duration=duration)
+#                     booking.save()
+#                     messages.success(request, 'Booking successful!')
+#                     return redirect('customerpanel')
+#                 else:
+#                     messages.error(request, 'Booking not permitted. Existing booking date is not before the new booking date.')
+#             except NurseBooking.DoesNotExist:
+#                 booking = NurseBooking.objects.create(user=user, nurse=nurse, date=date, duration=duration)
+#                 booking.save()
+#                 messages.success(request, 'Booking successful!')
+#                 return redirect('customerpanel')
+#         return render(request, 'Nurse/booking.html', {'form': form})
 class CreateBookingView(View):
     def get(self, request, pk=None):
         form = BookingForm()
         return render(request, 'Nurse/booking.html', {'form': form})
-    
+
     def post(self, request, pk=None):
         form = BookingForm(request.POST)
         if form.is_valid():
             date = form.cleaned_data['date']
             duration = form.cleaned_data['duration']
             user = request.user
-            nurse = Nurse.objects.get(user__id=pk) if pk else None
-            
-            try:
-                c_booking = NurseBooking.objects.filter(user=user, nurse=nurse).latest('date')
-                expiry_date = c_booking.date + relativedelta(days=30*duration)  
-                print(expiry_date,'===========')
-                
-                if date < expiry_date:
-                    booking = NurseBooking.objects.create(user=user, nurse=nurse, date=date, duration=duration)
-                    booking.save()
-                    messages.success(request, 'Booking successful!')
-                    return redirect('customerpanel')
-                else:
-                    messages.error(request, 'Booking not permitted. Existing booking date is not before the new booking date.')
-            except NurseBooking.DoesNotExist:
-                booking = NurseBooking.objects.create(user=user, nurse=nurse, date=date, duration=duration)
-                booking.save()
-                messages.success(request, 'Booking successful!')
-                return redirect('customerpanel')
-        return render(request, 'Nurse/booking.html', {'form': form})
+            nurse = get_object_or_404(Nurse, user__id=pk)
 
+            # Calculate new booking end date
+            new_booking_end_date = date + relativedelta(days=30 * duration)
+
+            # Check for any overlapping active booking for this nurse
+            active_booking = NurseBooking.objects.filter(nurse=nurse, is_active=True).first()
+
+            if active_booking:
+                current_booking_end_date = active_booking.date + relativedelta(days=30 * active_booking.duration)
+
+                if date <= current_booking_end_date:
+                    messages.error(request, 'This nurse is already booked during the selected period.')
+                    return render(request, 'Nurse/booking.html', {'form': form})
+
+            # Create new booking
+            booking = NurseBooking.objects.create(
+                user=user,
+                nurse=nurse,
+                date=date,
+                duration=duration,
+                is_active=True  # New booking is active by default
+            )
+            booking.save()
+
+            # Update nurse availability
+            nurse.is_available = False
+            nurse.save()
+
+            messages.success(request, 'Booking successful!')
+            return redirect('customerpanel')
+
+        return render(request, 'Nurse/booking.html', {'form': form})
+class UnbookNurseView(LoginRequiredMixin, View):
+    def post(self, request, booking_id):
+        booking = get_object_or_404(NurseBooking, id=booking_id, user=request.user, is_active=True)
+
+        # Mark booking inactive
+        booking.is_active = False
+        booking.save()
+
+        # Make nurse available again
+        nurse = booking.nurse
+        nurse.is_available = True
+        nurse.save()
+
+        messages.success(request, "You have successfully unbooked the nurse.")
+        return redirect('customerpanel')
 def bookingsuccess(request):
     return render(request,"Nurse/bookingsuccess.html")
 

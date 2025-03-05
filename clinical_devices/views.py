@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from .forms import *
 from django.http import HttpResponse
 from django.views.generic import DetailView
@@ -9,6 +9,9 @@ def clinical_base(request):
     
     return render(request, "clinical_base.html")
 
+def device_detail(request, device_id):
+    device = get_object_or_404(DeviceInformation, id=device_id)
+    return render(request, 'clinical_devices/detail_device.html', {'device': device})
 
 def add_device(request):
     if request.method == "POST":
@@ -41,14 +44,15 @@ def devicepage(request):
     return render(request, "clinical_devices/device_page.html", {"device_list": device_list})
 
 
+# def device_display(request, id):
+#     device_info = DeviceInformation.objects.filter(user=id, is_approved=True).order_by('-created_at')
+#     return render(request, "clinical_devices/my_devices.html", {"device_info": device_info})
+
+
 def device_display(request, id):
     device_info = DeviceInformation.objects.filter(user=id, is_approved=True).order_by('-created_at')
     return render(request, "clinical_devices/my_devices.html", {"device_info": device_info})
-
-
-def DeviceDetails(request, id):
-    device_info = DeviceInformation.objects.filter(id=id).order_by('-created_at')
-    return render(request, "clinical_devices/detail_device.html", {"devices": device_info})
+   
 
 def device_delete(request, id):
     a = DeviceInformation.objects.get(id=id)

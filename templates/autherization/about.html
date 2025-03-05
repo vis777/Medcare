@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{% comment %} <!DOCTYPE html> {% endcomment %}
 {% load static %}
 <html lang="en">
 
@@ -68,22 +68,22 @@
                         <nav class="site-navigation text-right text-md-center" role="navigation">
                             <ul class="site-menu js-clone-nav d-none d-lg-block">
                                 <li class="active"><a href="{% url 'index' %}">Home</a></li>
-                                <li class="has-children">
+                                {% comment %} <li class="has-children">
                                     <a href="#">Store</a>
                                     <ul class="dropdown">
                                         <li><a href="{% url 'listmedicines' %}">Medicines</a></li>
                                         <li><a href="{% url 'device_page' %}">Clinical Devices</a></li>
 
                                     </ul>
-                                </li>
-                                <li class="has-children">
+                                </li> {% endcomment %}
+                                {% comment %} <li class="has-children">
                                     <a href="#">Services</a>
                                     <ul class="dropdown">
                                         <li><a href="{% url 'approved_nurses_list' %}">Home nurse</a></li>
                                         <li><a href="{% url 'devicepanel' %}">Be a Seller?</a></li>
 
                                     </ul>
-                                </li>
+                                </li> {% endcomment %}
                                 <li class="has-children">
                                     <a href="#">Registrations</a>
                                     <ul class="dropdown">
@@ -110,7 +110,7 @@
                             </ul>
                         </nav>
                     </div>
-                    <div class="icons">
+                    {% comment %} <div class="icons">
                         <a href="#" class="icons-btn d-inline-block js-search-open"><span
                                 class="icon-search"></span></a>
                         <a href="cart.html" class="icons-btn d-inline-block bag">
@@ -119,7 +119,7 @@
                         </a>
                         <a href="#" class="site-menu-toggle js-menu-toggle ml-3 d-inline-block d-lg-none"><span
                                 class="icon-menu"></span></a>
-                    </div>
+                    </div> {% endcomment %}
                 </div>
             </div>
         </div>

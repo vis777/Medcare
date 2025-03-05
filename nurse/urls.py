@@ -10,6 +10,7 @@ urlpatterns = [
 
     path("Nurse/approved_nurse_profile/<int:pk>",NurseDetailView.as_view(),name="approved_nurse_profile"),
     path("Nurse/booking/<int:pk>", CreateBookingView.as_view(), name="booking"),
+    path('unbook/<int:booking_id>/', UnbookNurseView.as_view(), name='unbook_nurse'),
     path("Nurse/bookingsuccess/", bookingsuccess, name="bookingsucces"),
     path("Nurse/nursepanel/", NurseUserList.as_view(), name="nursepanel"),
     path("Nurse/user_approval/<int:id>/", request_approval, name="user_approval"),

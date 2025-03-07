@@ -1,14 +1,66 @@
 {% extends 'admin_base.html' %}
 {% block content %}
-{% comment %} <!DOCTYPE html> {% endcomment %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-tachometer-alt me-2"></i>Admin Dashboard
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="card bg-light border-0 h-100 transform-on-hover">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-user-nurse fa-3x text-primary mb-3"></i>
+                                    <h5 class="card-title">Manage Nurses</h5>
+                                    <p class="card-text text-muted">View, add, and edit nurse profiles</p>
+                                    <a href="{% url 'nurse_list' %}" class="btn btn-outline-primary">
+                                        Explore Nurses
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-light border-0 h-100 transform-on-hover">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-stethoscope fa-3x text-success mb-3"></i>
+                                    <h5 class="card-title">Clinical Devices</h5>
+                                    <p class="card-text text-muted">Manage medical equipment inventory</p>
+                                    <a href="{% url 'device_list' %}" class="btn btn-outline-success">
+                                        View Devices
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% comment %} <div class="col-md-4">
+                            <div class="card bg-light border-0 h-100 transform-on-hover">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-sign-out-alt fa-3x text-danger mb-3"></i>
+                                    <h5 class="card-title">Session Management</h5>
+                                    <p class="card-text text-muted">End current admin session</p>
+                                    <a href="{% url 'logout_view' %}" class="btn btn-outline-danger">
+                                        Logout
+                                    </a>
+                                </div>
+                            </div>
+                        </div> {% endcomment %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-</body>
-</html>
+<style>
+    .transform-on-hover {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .transform-on-hover:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+</style>
 {% endblock %}

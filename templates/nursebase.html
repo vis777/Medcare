@@ -120,12 +120,12 @@
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav" style="margin-left: 300px;">
               
-              <li class="nav-item">
+              {% comment %} <li class="nav-item">
                 <a id="nav-link1" class="nav-link" href="{% url 'nursepanel' %}">Request list</a>
-              </li>
-              <li class="nav-item">
+              </li> {% endcomment %}
+              {% comment %} <li class="nav-item">
                 <a id="nav-link2" class="nav-link" href="">Generate report</a>
-              </li>
+              </li> {% endcomment %}
              
               
               
@@ -139,6 +139,7 @@
       </nav>
 
     {% block content %}
+    
     {% endblock %}
     
 

@@ -114,11 +114,12 @@ class NurseProfileUpdateView(LoginRequiredMixin, UpdateView):
 
 class NurseListView(ListView):
     model = Nurse
-    template_name = 'Nurse/profile.html'  
+    template_name = 'Nurse/profile.html'
     context_object_name = 'nurses'
 
     def get_queryset(self):
-        return Nurse.objects.filter(is_active=True, )
+        return Nurse.objects.filter(is_active=True)
+
     
 
 # 
@@ -272,17 +273,16 @@ def bookingsuccess(request):
 
 @method_decorator(login_required, name='dispatch')
 @method_decorator(never_cache, name='dispatch')
-class NurseUserList(ListView):
+class NurseUserList(LoginRequiredMixin, ListView):
     model = NurseBooking
     template_name = 'Nurse/nursepanel.html'
-    context_object_name = "nurse_user"
+    context_object_name = 'bookings'  # The variable used in the template
 
     def get_queryset(self):
-    #    nurse=self.request.user
-       queryset = super().get_queryset()
+        nurse = self.request.user.nurse  # Assuming Nurse has OneToOneField to User
+        # Only get ACTIVE bookings
+        return NurseBooking.objects.filter(nurse=nurse, is_active=True)
 
-       queryset = queryset.filter(nurse=self.request.user.id,is_active=False)
-       return queryset
 
 
 

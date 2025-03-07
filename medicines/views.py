@@ -86,10 +86,13 @@ class MedicineAddView(CreateView):
 
 
 class MedicineListView(ListView):
-    template_name="medicines/list_medicines.html"
-    model=Medicine_inventory
-    context_object_name="medicines"
+    template_name = "medicines/list_medicines.html"
+    model = Medicine_inventory
+    context_object_name = "medicines"
     ordering = ['-created_at']
+
+    def get_queryset(self):
+        return Medicine_inventory.objects.filter(quanity_availble__gt=0).order_by('-created_at')
 
 
 

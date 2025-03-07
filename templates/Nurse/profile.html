@@ -96,27 +96,25 @@
     {% if nurses %}
     <div class="row">
         {% for nurse in nurses %}
-        <div class="col-lg-4 col-md-6 col-sm-12">
-            <div class="card nurse-card mb-3">
-                <div class="row g-0">
-                    <div class="col-md-5">
-                        {% if nurse.image %}
-                        <img src="{{ nurse.image.url }}" class="card-img-top" alt="...">
-                        {% endif %}
-                    </div>
-                    <div class="col-md-7">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ nurse.user.name }}</h5>
-                            <p class="card-text"><small class="text-muted">License_number : {{ nurse.license_number }}</small></p>
-
-                            <a href="{% url 'approved_nurse_profile' nurse.user.id %}" class="btn btn-primary">View details</a>
-
-                        </div>
+    <div class="col-lg-4 col-md-6 col-sm-12">
+        <div class="card nurse-card mb-3">
+            <div class="row g-0">
+                <div class="col-md-5">
+                    {% if nurse.image %}
+                    <img src="{{ nurse.image.url }}" class="card-img-top" alt="...">
+                    {% endif %}
+                </div>
+                <div class="col-md-7">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ nurse.user.name }}</h5>
+                        <p class="card-text"><small class="text-muted">License_number: {{ nurse.license_number }}</small></p>
+                        <a href="{% url 'approved_nurse_profile' nurse.user.id %}" class="btn btn-primary">View details</a>
                     </div>
                 </div>
             </div>
         </div>
-        {% endfor %}
+    </div>
+{% endfor %}
     </div>
     {% endif %}
 </div>

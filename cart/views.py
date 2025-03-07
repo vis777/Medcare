@@ -132,66 +132,149 @@ def OrderForm(request):
 
 
 @login_required
-def medadd_to_cart(request, id):
-    user = request.user
-
-    medicine = get_object_or_404(Medicine_inventory, id=id)
-    try:
-        cart_item = Medcart.objects.get(user=user, medicine=medicine)
-        if cart_item.quantity < medicine.quanity_availble:
-            cart_item.quantity += 1
-            cart_item.save()
-        else:
-            messages.error(request, "Sorry, this product is out of stock.")
-    except Medcart.DoesNotExist:
-        if medicine.quanity_availble > 0:
-            cart_item = Medcart.objects.create(user=user, medicine=medicine, quantity=1)
-            cart_item.save()
-        else:
-            messages.error(request, "Sorry, this product is out of stock.")
+def medadd_to_cart(request, medicine_id):
+    medicine = get_object_or_404(Medicine_inventory, id=medicine_id)
+    cart_item, created = Medcart.objects.get_or_create(user=request.user, medicine=medicine)
+    cart_item.quantity += 1
+    cart_item.save()
     return redirect('med_cart_view')
 
+def remove_one_item(request, medicine_id):
+    medicine = get_object_or_404(Medicine_inventory, id=medicine_id)
+    cart_item = get_object_or_404(Medcart, user=request.user, medicine=medicine)
 
-def med_cart_view(request):
-    total = 0
-    user = request.user
-    cart = Medcart.objects.filter(user=user)
-    for item in cart:
-        total += item.quantity * item.medicine.price
-    return render(request, 'medicine_cart_view.html', {'cart': cart, 'total': total})
+    if cart_item.quantity > 1:
+        cart_item.quantity -= 1
+        cart_item.save()
+    else:
+        cart_item.delete()
 
-def medcart_view(request):
-    user = request.user
-    cart = Medcart.objects.filter(user=user)
-    total = 0
-    for item in cart:
-        total += item.subtotal()
-
-    return render(request, "cart/medicine_cart_view.html", {'cart': cart, 'total': total})
+    return redirect('med_cart_view')
 
 def remove_cart_item(request, id):
-    cart_item = get_object_or_404(Medcart, id=id)
-
+    cart_item = get_object_or_404(Medcart, id=id, user=request.user)
     cart_item.delete()
-
     return redirect('med_cart_view')
+def med_cart_view(request):
+    user = request.user
+    cart = Medcart.objects.filter(user=user)
+    total = sum(item.subtotal() for item in cart)
+
+    return render(request, "cart/medicine_cart_view.html", {'cart': cart, 'total': total})
+# def medadd_to_cart(request, id):
+#     user = request.user
+
+#     medicine = get_object_or_404(Medicine_inventory, id=id)
+#     try:
+#         cart_item = Medcart.objects.get(user=user, medicine=medicine)
+#         if cart_item.quantity < medicine.quanity_availble:
+#             cart_item.quantity += 1
+#             cart_item.save()
+#         else:
+#             messages.error(request, "Sorry, this product is out of stock.")
+#     except Medcart.DoesNotExist:
+#         if medicine.quanity_availble > 0:
+#             cart_item = Medcart.objects.create(user=user, medicine=medicine, quantity=1)
+#             cart_item.save()
+#         else:
+#             messages.error(request, "Sorry, this product is out of stock.")
+#     return redirect('med_cart_view')
+
+
+# def med_cart_view(request):
+#     total = 0
+#     user = request.user
+#     cart = Medcart.objects.filter(user=user)
+#     for item in cart:
+#         total += item.quantity * item.medicine.price
+#     return render(request, 'medicine_cart_view.html', {'cart': cart, 'total': total})
+
+# def medcart_view(request):
+#     user = request.user
+#     cart = Medcart.objects.filter(user=user)
+#     total = sum(item.subtotal() for item in cart)
+
+#     return render(request, "cart/medicine_cart_view.html", {'cart': cart, 'total': total})
+
+
+# def remove_cart_item(request, id):
+#     cart_item = get_object_or_404(Medcart, id=id)
+
+#     cart_item.delete()
+
+#     return redirect('med_cart_view')
+
+# def MedorderForm(request):
+#     if(request.method=="POST"):
+#         address=request.POST['address']
+#         phone=request.POST['phone']
+#         user=request.user
+#         cart=Medcart.objects.filter(user=user)
+#         total=0
+#         for i in cart:
+#             total=total+i.quantity*i.medicine.price
+#             obj=MedicineOrder.objects.create(user=user,address=address,phone=phone,medicine=i.medicine,no_of_items=i.quantity,order_status="paid", total_price=total)
+#             obj.save()
+#             i.medicine.delete()
+#         cart.delete()
+#         return redirect("payment")
+
+#     return render(request,"cart/orderform.html")
+
+from django.shortcuts import render, redirect
+from django.db import transaction
+from .models import Medcart, MedicineOrder
+from medicines.models import Medicine_inventory
 
 def MedorderForm(request):
-    if(request.method=="POST"):
-        address=request.POST['address']
-        phone=request.POST['phone']
-        user=request.user
-        cart=Medcart.objects.filter(user=user)
-        total=0
-        for i in cart:
-            total=total+i.quantity*i.medicine.price
-            obj=MedicineOrder.objects.create(user=user,address=address,phone=phone,medicine=i.medicine,no_of_items=i.quantity,order_status="paid", total_price=total)
-            obj.save()
-            i.medicine.delete()
-        cart.delete()
-        return redirect("payment")
+    if request.method == "POST":
+        address = request.POST['address']
+        phone = request.POST['phone']
+        user = request.user
 
-    return render(request,"cart/orderform.html")
+        cart = Medcart.objects.filter(user=user)
+
+        if not cart.exists():
+            return redirect("cart")
+
+        try:
+            with transaction.atomic():  # Ensure atomicity (all or nothing)
+                for item in cart:
+                    total_price = item.quantity * item.medicine.price
+
+                    # Create order
+                    MedicineOrder.objects.create(
+                        user=user,
+                        address=address,
+                        phone=phone,
+                        medicine=item.medicine,
+                        no_of_items=item.quantity,
+                        order_status="paid",
+                        total_price=total_price
+                    )
+
+                    # Update stock
+                    medicine = item.medicine
+                    if medicine.quanity_availble >= item.quantity:
+                        medicine.quanity_availble -= item.quantity
+                        medicine.save()
+                    else:
+                        return render(request, "cart/orderform.html", {
+                            "error": f"Not enough stock for {medicine.medicine_name}"
+                        })
+
+                # Clear the cart
+                cart.delete()
+
+            return redirect("payment")
+
+        except Exception as e:
+            return render(request, "cart/orderform.html", {
+                "error": str(e)
+            })
+
+    return render(request, "cart/orderform.html")
+
 
 
 def medorder_confirm_view(request):

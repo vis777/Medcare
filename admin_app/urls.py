@@ -11,8 +11,11 @@ urlpatterns = [
     path('devices/unapprove/<int:id>/', views.unapprove_device, name='unapprove_device'),
     path('devices/delete/<int:id>/', views.delete_device, name='delete_device'),
 
-    path("admin_app/nurse_list/", views.nurse_list, name="nurse_list"),
-    path("admin_app/nurse_approval/<int:id>/", views.nurse_approval, name="nurse_approval"),
-
+    # path("admin_app/nurse_list/", views.nurse_list, name="nurse_list"),
+    # path("admin_app/nurse_approval/<int:id>/", views.nurse_approval, name="nurse_approval"),
+    path('nurse-list/', views.nurse_list, name='nurse_list'),
+    path('nurse-approve/<int:user_id>/', views.nurse_approval, name='nurse_approval'),
+    path('nurse-unapprove/<int:user_id>/', views.nurse_unapprove, name='nurse_unapprove'),
+    path('nurse-delete/<int:user_id>/', views.delete_nurse, name='delete_nurse'),
     
 ]

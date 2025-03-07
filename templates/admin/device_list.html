@@ -1,55 +1,183 @@
 {% extends 'admin_base.html' %}
-
 {% block content %}
-<div class="site-section">
-    <center>
-        <h1>List of Clinical devices</h1>
-    </center>
-
-    {% if device_list %}
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Product Name</th>
-                <th>Seller Name</th>
-                <th>Product Image</th>
-                <th>Phone</th>
-                <th>Price</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for device in device_list %}
-            <tr>
-                <td>{{ device.product_name }}</td>
-                <td>{{ device.seller_name }}</td>
-                {% if device.product_image %}
-                  <td><img src="{{device.product_image.url}}" alt="Image" style="height: 100px;width: 100px;"></td>
-                  {% endif %}
-                <td>{{ device.phone }}</td>
-                <td>₹{{ device.price }}</td>
-                <td>
-                    {% if device.is_approved %}
-                        <span class="badge bg-success">Approved</span>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-stethoscope me-2"></i>Clinical Devices Management
+                    </h3>
+                    <div class="header-actions">
+                        <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#filterModal">
+                            <i class="fas fa-filter me-1"></i>Filter
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if device_list %}
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Product Image</th>
+                                        <th>Product Name</th>
+                                        <th>Seller Name</th>
+                                        <th>Contact</th>
+                                        <th>Price</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for device in device_list %}
+                                    <tr>
+                                        <td>
+                                            <div class="device-image-container">
+                                                {% if device.product_image %}
+                                                    <img src="{{ device.product_image.url }}" 
+                                                         alt="{{ device.product_name }}" 
+                                                         class="device-image rounded">
+                                                {% else %}
+                                                    <div class="device-image-placeholder rounded">
+                                                        <i class="fas fa-image"></i>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                        <td>{{ device.product_name }}</td>
+                                        <td>{{ device.seller_name }}</td>
+                                        <td>
+                                            <div class="d-flex flex-column">
+                                                <small class="text-muted">
+                                                    <i class="fas fa-phone me-1"></i>{{ device.phone }}
+                                                </small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <strong class="text-success">₹{{ device.price|floatformat:2 }}</strong>
+                                        </td>
+                                        <td>
+                                            {% if device.is_approved %}
+                                                <span class="badge bg-success">
+                                                    <i class="fas fa-check-circle me-1"></i>Approved
+                                                </span>
+                                            {% else %}
+                                                <span class="badge bg-warning">
+                                                    <i class="fas fa-clock me-1"></i>Pending
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                {% if not device.is_approved %}
+                                                    <a href="{% url 'device_approval' device.id %}" 
+                                                       class="btn btn-success btn-sm" 
+                                                       title="Approve Device">
+                                                        <i class="fas fa-check"></i>
+                                                    </a>
+                                                {% else %}
+                                                    <a href="{% url 'unapprove_device' device.id %}" 
+                                                       class="btn btn-warning btn-sm" 
+                                                       title="Unapprove Device">
+                                                        <i class="fas fa-times"></i>
+                                                    </a>
+                                                {% endif %}
+                                                <a href="{% url 'delete_device' device.id %}" 
+                                                   class="btn btn-danger btn-sm" 
+                                                   onclick="return confirm('Are you sure you want to delete this device?')"
+                                                   title="Delete Device">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     {% else %}
-                        <span class="badge bg-warning">Pending</span>
+                        <div class="alert alert-info text-center" role="alert">
+                            <i class="fas fa-info-circle me-2"></i>No clinical devices available at the moment.
+                        </div>
                     {% endif %}
-                </td>
-                <td>
-                    {% if not device.is_approved %}
-                        <a href="{% url 'device_approval' device.id %}" class="btn btn-success btn-sm">Approve</a>
-                    {% else %}
-                        <a href="{% url 'unapprove_device' device.id %}" class="btn btn-warning btn-sm">Unapprove</a>
-                    {% endif %}
-                    <a href="{% url 'delete_device' device.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-    <p>No devices available.</p>
-    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- Filter Modal -->
+<div class="modal fade" id="filterModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Filter Devices</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <select class="form-select">
+                            <option>All Devices</option>
+                            <option>Approved</option>
+                            <option>Pending</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Price Range</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" placeholder="Min Price">
+                            <span class="input-group-text">to</span>
+                            <input type="number" class="form-control" placeholder="Max Price">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Apply Filters</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .device-image-container {
+        width: 80px;
+        height: 80px;
+        overflow: hidden;
+    }
+    .device-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .device-image-placeholder {
+        width: 80px;
+        height: 80px;
+        background-color: #e9ecef;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6c757d;
+    }
+    .btn-group .btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+    .table-responsive {
+        overflow-x: auto;
+    }
+    @media (max-width: 768px) {
+        .header-actions {
+            display: none;
+        }
+        .device-image-container {
+            width: 50px;
+            height: 50px;
+        }
+    }
+</style>
 {% endblock %}

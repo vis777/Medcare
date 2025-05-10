@@ -37,11 +37,11 @@
             <h5 class="card-title"><b>{{ device.product_name }}</b></h5>
             <p id="price" class="card-text">₹{{ device.price }}</p>
             <p class="card-text">{{ device.description }}</p>
+            <p class="card-text">{{ device.quantity_available}}</p>
             <p class="card-text">Seller Name: {{ device.seller_name }}</p>
             <p id="phone" class="card-text">Phone: {{ device.phone }}</p>
 
             <a id="add-to-cart" href="{% url 'add_to_cart' device.id %}" class="btn btn-primary">Add to cart</a>
-            <a href="#" class="btn btn-primary">Buy now</a>
         </div>
     </div>
 </div>

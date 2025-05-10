@@ -1,0 +1,36 @@
+{% comment %} <!DOCTYPE html> {% endcomment %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate of Registration</title>
+    <style>
+        body { font-family: 'Times New Roman', serif; text-align: center; }
+        .certificate-container { border: 10px solid #23c4c4; padding: 30px; max-width: 800px; margin: auto; }
+        .certificate-header img { width: 120px; }
+        .profile-img { width: 150px; height: 150px; border-radius: 50%; border: 5px solid #23c4c4; }
+        h1 { color: #23c4c4; font-size: 32px; }
+        .info-label { font-weight: bold; color: #23c4c4; }
+        .info-value { color: #555; }
+    </style>
+</head>
+<body>
+    <div class="certificate-container">
+        <div class="certificate-header">
+            <img src="{{ logo_url }}" alt="Logo">
+            <h1>Certificate of Registration</h1>
+        </div>
+        
+        <img src="{{ profile_img_url }}" class="profile-img" alt="Profile Image">
+
+        <div>
+            <p class="info-label">Name: <span class="info-value">{{ user.username }}</span></p>
+            <p class="info-label">License Number: <span class="info-value">{{ nurse_profile.license_number }}</span></p>
+            <p class="info-label">Email: <span class="info-value">{{ user.email }}</span></p>
+            <p class="info-label">Phone: <span class="info-value">{{ nurse_profile.phone }}</span></p>
+            <p class="info-label">Address: <span class="info-value">{{ nurse_profile.address }}</span></p>
+            <p class="info-label">Bio: <span class="info-value">{{ nurse_profile.profile }}</span></p>
+        </div>
+    </div>
+</body>
+</html>

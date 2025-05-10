@@ -67,42 +67,40 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 class NurseProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = Nurse
-    form_class =NurseProfileUpdateForm
+    form_class = NurseProfileUpdateForm
     template_name = 'Nurse/change_profile.html'
     success_url = reverse_lazy('nursepanel')
-    context_object_name="nurse_profile"
+    context_object_name = "nurse_profile"
 
-    
     def get_object(self, queryset=None):
         return Nurse.objects.get(user=self.request.user)
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['email'] = self.request.user.email
         context['name'] = self.request.user.name
         return context
-    
 
     def get_initial(self):
-       
         initial = super().get_initial()
-        
         user = self.request.user
         initial['email'] = user.email
-        
+        initial['name'] = user.name
+        return initial  # <-- Make sure to return initial dictionary
 
-        initial['name'] = user.name  
-        
     def form_valid(self, form):
-        
         nurse_profile = form.save(commit=False)
+        
+        # Check if a new image was uploaded
+        if 'profile_image' in self.request.FILES:
+            nurse_profile.profile_image = self.request.FILES['profile_image']
+        
         nurse_profile.save()
 
+        # Update user model fields
         self.request.user.email = form.cleaned_data['email']
+        self.request.user.name = form.cleaned_data['name']
         self.request.user.save()
-        self.request.user.name= form.cleaned_data['name']
-        self.request.user.save()
-
 
         messages.success(self.request, "Profile updated successfully")
         return super().form_valid(form)
@@ -170,9 +168,6 @@ class NurseDetailView(View):
             "user_booking": user_booking
         }
         return render(request, 'Nurse/nurseprofile_for_user.html', context)
-
-    
-
 
 
 
@@ -338,3 +333,64 @@ def nurse_delete(request, id):
     except NormalUser.DoesNotExist:
         print("Nurse profile does not exist.")  
         return redirect("index")  
+
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse
+from weasyprint import HTML, CSS
+from django.template.loader import render_to_string
+from django.conf import settings
+import os
+
+from .models import Nurse
+
+def certificate_nurse(request, pk):
+    nurse_profile = get_object_or_404(Nurse, pk=pk)
+    context = {
+        'nurse_profile': nurse_profile,
+        'user': nurse_profile.user,
+    }
+    return render(request, 'Nurse/certificate_nurse.html', context)
+
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse
+from weasyprint import HTML, CSS
+from django.template.loader import render_to_string
+from django.conf import settings
+import os
+
+from .models import Nurse
+
+def download_nurse_certificate(request, pk):
+    nurse_profile = get_object_or_404(Nurse, pk=pk)
+
+
+    logo_url = request.build_absolute_uri(settings.STATIC_URL + "images/carelink-high-resolution-logo-transparent.png")
+    profile_img_url = request.build_absolute_uri(nurse_profile.image.url)  
+
+   
+    html_content = render_to_string('Nurse/certificate_nurse_pdf.html', {
+        'nurse_profile': nurse_profile,
+        'user': nurse_profile.user,
+        'logo_url': logo_url,
+        'profile_img_url': profile_img_url,
+    })
+
+    # Convert HTML to PDF
+    pdf = HTML(string=html_content).write_pdf(
+        stylesheets=[CSS(string="""
+            body { font-family: 'Times New Roman', serif; text-align: center; }
+            .certificate-container { border: 10px solid #23c4c4; padding: 30px; max-width: 800px; margin: auto; }
+            .certificate-header img { width: 120px; }
+            .profile-img { width: 150px; height: 150px; border-radius: 50%; border: 5px solid #23c4c4; }
+            h1 { color: #23c4c4; font-size: 32px; }
+            .info-label { font-weight: bold; color: #23c4c4; }
+            .info-value { color: #555; }
+        """)]
+    )
+
+    # Create HTTP response with the PDF file
+    response = HttpResponse(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="nurse_certificate_{nurse_profile.pk}.pdf"'
+    return response
+
+    

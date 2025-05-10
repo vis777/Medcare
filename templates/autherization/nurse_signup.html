@@ -2,43 +2,135 @@
 
 {% block content %}
 <style>
-    #myForm{
-        margin-top: 30px;
-        margin-bottom: 30px;
-        width: 60%;
-        background-color: aliceblue;
-        border: 2px ridge lightblue;
+    body {
+        background: linear-gradient(135deg, #23c4c4 0%, #1a8f8f 100%);
+        min-height: 100vh;
     }
+
+    #myForm {
+        margin: 30px auto;
+        width: 80%;
+        max-width: 800px;
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+    }
+
+    .page-title {
+        color: white;
+        font-size: 2.5rem;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 2rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
     .register-form-label {
-        font-weight: bold;
-        color: black;
-        background-color: transparent;
-      
-        text-align: right;
-        margin-bottom: 15px;
+        font-weight: 600;
+        color: #2c3e50;
+        text-align: left;
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
     }
-    
-    .register-form-control {
-        
-        border-radius: 5px;
-        padding: 8px;
+
+    .form-control {
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 0.75rem;
         width: 100%;
-        animation: light-travel 2s infinite;
+        transition: all 0.3s ease;
     }
-    .form-group{
-        margin-left: 30px;
-        margin-right: 30px;
+
+    .form-control:focus {
+        border-color: #23c4c4;
+        box-shadow: 0 0 0 3px rgba(35, 196, 196, 0.2);
+        outline: none;
     }
-    h1{
-        color: whitesmoke;
+
+    .form-group {
+        margin-bottom: 1.5rem;
     }
-    </style>
-    
-    <div class="mt-5"></div>
+
+    .error-message {
+        color: #e74c3c;
+        font-size: 0.85rem;
+        margin-top: 0.25rem;
+    }
+
+    .btn-primary {
+        background-color: #23c4c4;
+        border: none;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        color: white;
+        margin: 1.5rem 0;
+    }
+
+    .btn-primary:hover {
+        background-color: #1a8f8f;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(35, 196, 196, 0.2);
+    }
+
+    .login-link {
+        text-align: center;
+        margin-top: 1rem;
+        padding-bottom: 1rem;
+        color: #2c3e50;
+    }
+
+    .login-link a {
+        color: #23c4c4;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+    }
+
+    .login-link a:hover {
+        color: #1a8f8f;
+        text-decoration: underline;
+    }
+
+    .alert {
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-errors {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 1.5rem 0;
+        color: #e74c3c;
+        font-size: 0.9rem;
+    }
+
+    #id_image, #id_profile {
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 0.5rem;
+        width: 100%;
+    }
+
+    @media (max-width: 768px) {
+        #myForm {
+            width: 95%;
+            padding: 1.5rem;
+        }
+
+        .register-form-label {
+            text-align: left;
+            margin-bottom: 0.5rem;
+        }
+    }
+</style>
+
+<div class="container">
     {% if messages %}
-    <div class="container d-flex justify-content-center">
-        <div class="w-50" style="height: 100px;">
-            <div>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
                 {% for m in messages %}
                     {% if m.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -49,166 +141,156 @@
                 {% endfor %}
             </div>
         </div>
-    </div>
-{% endif %}
+    {% endif %}
 
+    <h1 class="page-title">Nurse Sign Up</h1>
+    
+    <form id="myForm" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% if form.errors %}
+            <ul class="form-errors">
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        {% if field.name == 'username' or field.name == 'email' or field.name == 'password1' or field.name == 'password2' or field.name == 'phone' %}
+                            <li>{{ error }}</li>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        {% endif %}
 
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="id_username" class="register-form-label">{{ form.username.label_tag }}</label>
+                    {{ form.username }}
+                    <div id="usernameError" class="error-message"></div>
+                </div>
 
-<div class="container mt-5 mb-5">
-    <center>
-    <h1>Nurse Sign Up</h1>
-</center>
-    <div class="d-flex justify-content-center">
-            <form id="myForm" method="post" class="w-75"   enctype="multipart/form-data">
-                {% csrf_token %}
-                {% if form.errors %}
-                    <ul style="color: red;">
-                        {% for field in form %}
-                            {% for error in field.errors %}
-                            {% if field.name == 'username' or field.name == 'email' or field.name == 'password1' or field.name == 'password2' or field.name == 'phone' %}                                    <li>{{ error }}</li>
-                                {% endif %}
-                            {% endfor %}
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-                    <div class="form-group row mt-5">
-                        <label for="id_username" class="col-sm-3 col-form-label register-form-label">{{ form.username.label_tag }}</label>
-                        <div class="col-sm-9">
-                            {{ form.username }}
-                            <div id="usernameError" style="color: red;"></div>
+                <div class="form-group">
+                    <label for="id_name" class="register-form-label">{{ form.name.label_tag }}</label>
+                    {{ form.name }}
+                    <div id="nameError" class="error-message"></div>
+                </div>
 
-                        </div>
-                    </div>
-                    <div class="form-group row mt-5">
-                        <label for="id_name" class="col-sm-3 col-form-label register-form-label">{{ form.name.label_tag }}</label>
-                        <div class="col-sm-9">
-                            {{ form.name }}
-                            <div id="nameError" style="color: red;"></div>
+                <div class="form-group">
+                    <label for="id_email" class="register-form-label">{{ form.email.label_tag }}</label>
+                    {{ form.email }}
+                    <div id="emailError" class="error-message"></div>
+                </div>
 
-                        </div>
-                    </div>
-                    
-                    
-                    <div class="form-group row">
-                        <label for="id_email" class="col-sm-3 col-form-label register-form-label">{{ form.email.label_tag }}</label>
-                        <div class="col-sm-9">
-                            {{ form.email }}
-                            <div id="emailError" style="color: red;"></div>
+                <div class="form-group">
+                    <label for="id_phone" class="register-form-label">{{ form.phone.label_tag }}</label>
+                    {{ form.phone }}
+                    <div id="phoneError" class="error-message"></div>
+                </div>
+            </div>
 
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="id_address" class="col-sm-3 col-form-label register-form-label">{{ form.address.label_tag }}</label>
-                        <div class="col-sm-9">
-                            {{ form.address }}
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="id_phone" class="col-sm-3 col-form-label register-form-label">{{ form.phone.label_tag }}</label>
-                        <div class="col-sm-9">
-                            {{ form.phone }}
-                            <div id="phoneError" style="color: red;"></div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="id_license_number" class="register-form-label">{{ form.license_number.label_tag }}</label>
+                    {{ form.license_number }}
+                    {% if form.license_number.errors %}
+                        <div class="error-message">{{ form.license_number.errors }}</div>
+                    {% endif %}
+                </div>
 
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="id_license_number" class="col-sm-3 col-form-label register-form-label">{{ form.license_number.label_tag }}</label>
-                        <div class="col-sm-9">
-                            {{ form.license_number }}
-                            <!-- <div id="license_numberError" style="color: red;"></div> -->
-                            {% if form.license_number.errors %}
-                             <div style="color: red;">{{ form.license_number.errors }}</div>  <!-- Display license_number error message here -->
-                            {% endif %}
+                <div class="form-group">
+                    <label for="id_address" class="register-form-label">{{ form.address.label_tag }}</label>
+                    {{ form.address }}
+                </div>
 
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="id_image" class="col-sm-3 col-form-label register-form-label">{{ form.image.label_tag }}</label>
-                        <div class="col-sm-9">
-                            {{ form.image }}
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="id_profile" class="col-sm-3 col-form-label register-form-label">{{ form.profile.label_tag }}</label>
-                        <div class="col-sm-9">
-                            {{ form.profile }}
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="id_password1" class="col-sm-3 col-form-label register-form-label">{{ form.password1.label_tag }}</label>
-                        <div class="col-sm-9">
-                            {{ form.password1 }}
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="id_password2" class="col-sm-3 col-form-label register-form-label">{{ form.password2.label_tag }}</label>
-                        <div class="col-sm-9">
-                            {{ form.password2 }}
-                            <div id="passwordError" style="color: red;"></div>
+                <div class="form-group">
+                    <label for="id_image" class="register-form-label">{{ form.image.label_tag }}</label>
+                    {{ form.image }}
+                </div>
 
-                        </div>
-                    </div>
-                    <div class="text-center mb-5">
-                        <button type="submit" class="btn btn-primary">Sign Up</button>
-                    </div>
-                </form>
+                <div class="form-group">
+                    <label for="id_profile" class="register-form-label">{{ form.profile.label_tag }}</label>
+                    {{ form.profile }}
+                </div>
             </div>
         </div>
-   
-    <script>
-        const form = document.getElementById('myForm');
-        const usernameField = document.getElementById('id_username');
-        const emailField = document.getElementById('id_email');
-        const passwordField = document.getElementById('id_password1');
-        const confirmPasswordField = document.getElementById('id_password2');
-        const phoneField = document.getElementById('id_phone');
-        const usernameError = document.getElementById('usernameError');
-        const emailError = document.getElementById('emailError');
-        const passwordError = document.getElementById('passwordError');
-        const phoneError = document.getElementById('phoneError');
-    
-        usernameField.addEventListener('input', validateUsername);
-        emailField.addEventListener('input', validateEmail);
-        passwordField.addEventListener('input', validatePassword);
-        phoneField.addEventListener('input', validatePhone);
-    
-        function validateUsername() {
-            const username = usernameField.value;
-            if (username.length < 5) {
-                usernameError.textContent = 'Username must be at least 5 characters long';
-            } else {
-                usernameError.textContent = '';
-            }
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="id_password1" class="register-form-label">{{ form.password1.label_tag }}</label>
+                    {{ form.password1 }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="id_password2" class="register-form-label">{{ form.password2.label_tag }}</label>
+                    {{ form.password2 }}
+                    <div id="passwordError" class="error-message"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+            <div class="login-link">
+                Already have an account? <a href="{% url 'login' %}">Login here</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    const form = document.getElementById('myForm');
+    const usernameField = document.getElementById('id_username');
+    const emailField = document.getElementById('id_email');
+    const passwordField = document.getElementById('id_password1');
+    const confirmPasswordField = document.getElementById('id_password2');
+    const phoneField = document.getElementById('id_phone');
+    const usernameError = document.getElementById('usernameError');
+    const emailError = document.getElementById('emailError');
+    const passwordError = document.getElementById('passwordError');
+    const phoneError = document.getElementById('phoneError');
+
+    usernameField.addEventListener('input', validateUsername);
+    emailField.addEventListener('input', validateEmail);
+    passwordField.addEventListener('input', validatePassword);
+    phoneField.addEventListener('input', validatePhone);
+
+    function validateUsername() {
+        const username = usernameField.value;
+        if (username.length < 5) {
+            usernameError.textContent = 'Username must be at least 5 characters long';
+        } else {
+            usernameError.textContent = '';
         }
-    
-        function validateEmail() {
-            const email = emailField.value;
-            const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!pattern.test(email)) {
-                emailError.textContent = 'Invalid email address';
-            } else {
-                emailError.textContent = '';
-            }
+    }
+
+    function validateEmail() {
+        const email = emailField.value;
+        const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!pattern.test(email)) {
+            emailError.textContent = 'Invalid email address';
+        } else {
+            emailError.textContent = '';
         }
-    
-        function validatePassword() {
-            const password = passwordField.value;
-            if (password.length < 8) {
-                passwordError.textContent = 'Password must be at least 8 characters long';
-            } else {
-                passwordError.textContent = '';
-            }
+    }
+
+    function validatePassword() {
+        const password = passwordField.value;
+        if (password.length < 8) {
+            passwordError.textContent = 'Password must be at least 8 characters long';
+        } else {
+            passwordError.textContent = '';
         }
-    
-        function validatePhone() {
-            const phone = phoneField.value;
-            const pattern = /^\d{10}$/;
-            if (!pattern.test(phone)) {
-                phoneError.textContent = 'Phone number must be 10 digits';
-            } else {
-                phoneError.textContent = '';
-            }
+    }
+
+    function validatePhone() {
+        const phone = phoneField.value;
+        const pattern = /^\d{10}$/;
+        if (!pattern.test(phone)) {
+            phoneError.textContent = 'Phone number must be 10 digits';
+        } else {
+            phoneError.textContent = '';
         }
-    </script>
-    
-    {%endblock%}
+    }
+</script>
+
+{% endblock %}

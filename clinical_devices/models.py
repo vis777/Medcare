@@ -12,6 +12,7 @@ class DeviceInformation(models.Model):
     price = models.DecimalField(max_digits=12, decimal_places=0)
     is_approved = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True,null=True,blank=True)
+    quantity_available = models.IntegerField()
     def __str__(self):
         return self.product_name
     

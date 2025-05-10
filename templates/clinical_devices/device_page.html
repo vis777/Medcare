@@ -65,6 +65,7 @@
                     
                     <h5 class="card-title">{{device.product_name}}</h5>
                     <p id="price" class="card-text">₹{{device.price}}</p>
+                    <p class="card-text">Quantity Available: {{device.quantity_available}}</p>
                     
                     <a href="{% url 'device_detail' device.id %}" class="btn btn-primary">View Details</a>
                     

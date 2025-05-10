@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import ssl
+import certifi
+ssl._create_default_https_context = ssl.create_default_context(cafile=certifi.where())
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -44,7 +47,8 @@ INSTALLED_APPS = [
     'admin_app',
     'nurse',
     'tempus_dominus',
-    'cart'
+    'cart',
+    'mathfilters'
 ]
 
 MIDDLEWARE = [
@@ -128,6 +132,7 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS=[os.path.join(BASE_DIR,'static'),]
 MEDIA_ROOT=os.path.join(BASE_DIR,'media')
 MEDIA_URL='/media/'
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -138,8 +143,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True  # TLS - Transport Layer Security
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'carelink30@gmail.com'
-EMAIL_HOST_PASSWORD = 'csgydcvdfxbnvkad'
+EMAIL_HOST_USER = 'sandrapremkuma@gmail.com'
+EMAIL_HOST_PASSWORD = 'habg aokn awbe fnwk'
 
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 TIME_ZONE = 'Asia/Kolkata'

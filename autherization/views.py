@@ -14,7 +14,6 @@ from django.views import View
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
 
-
 def customer_signup(request):
     if request.method == 'POST':
         form = CustomerSignUpForm(request.POST)
@@ -31,13 +30,21 @@ def customer_signup(request):
                 "Best regards,\n"
                 "The CareLink Team"
             )
-            email_from = "carelink30@gmail.com"
+            email_from = "sandrapremkuma@gmail.com"
             email_to = em
-            send_mail(subject, message, email_from, [email_to])
+            
+            try:
+                send_mail(subject, message, email_from, [email_to])
+            except Exception as e:
+                # Log the error but continue with signup process
+                print(f"Email sending failed: {e}")
+                # Consider adding proper logging here
+                
             return redirect('login')
     else:
         form = CustomerSignUpForm()
     return render(request, 'autherization/customer_signup.html', {'form': form})
+
 
 def nurse_signup(request):
     if request.method == 'POST':
@@ -80,7 +87,7 @@ def shop_signup(request):
                 "Best regards,\n"
                 "The CareLink Team"
             )
-            email_from = "carelink30@gmail.com"
+            email_from = "sandrapremkuma@gmail.com"
             email_to = em
             send_mail(subject, message, email_from, [email_to])
             return redirect('login')

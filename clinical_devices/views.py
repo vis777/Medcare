@@ -23,7 +23,8 @@ def add_device(request):
             ph = device.cleaned_data['phone']
             pr = device.cleaned_data['price']
             img = device.cleaned_data['product_image']
-            devices = DeviceInformation(product_name=pnm, seller_name=snm, description=desc, phone=ph, price=pr, product_image=img, user=request.user)
+            qty = device.cleaned_data['quantity_available']
+            devices = DeviceInformation(product_name=pnm, seller_name=snm, description=desc, phone=ph, price=pr, product_image=img, user=request.user, quantity_available=qty)
             devices.save()    
             
             return redirect("upload_success")

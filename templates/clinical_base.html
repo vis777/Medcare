@@ -77,7 +77,7 @@
                 <a href="#">Services</a>
                 <ul class="dropdown">
                   <li><a href="{% url 'approved_nurses_list' %}">Home nurse</a></li>
-                  <li><a href="{% url 'devicepanel' %}">Be a Seller?</a></li>
+                  <li><a href="{% url 'add_device' %}">Be a Seller?</a></li>
               
               </ul>
             </li>
@@ -97,13 +97,13 @@
             </nav>
           </div>
           <div class="icons">
-            <a href="#" class="icons-btn d-inline-block js-search-open"><span class="icon-search"></span></a>
+            {% comment %} <a href="#" class="icons-btn d-inline-block js-search-open"><span class="icon-search"></span></a>
             <a href="cart.html" class="icons-btn d-inline-block bag">
               <span class="icon-shopping-bag"></span>
               <span class="number">2</span>
             </a>
             <a href="#" class="site-menu-toggle js-menu-toggle ml-3 d-inline-block d-lg-none"><span
-                class="icon-menu"></span></a>
+                class="icon-menu"></span></a> {% endcomment %}
           </div>
         </div>
       </div>
@@ -116,7 +116,7 @@
             <ul class="navbar-nav" style="margin-left: 300px;">
               
               <li class="nav-item">
-                <a id="nav-link1" class="nav-link" href="{% url 'devicepanel' %}">Upload Device</a>
+                <a id="nav-link1" class="nav-link" href="{% url 'add_device' %}">Upload Device</a>
               </li>
               <li class="nav-item">
                 <a id="nav-link2" class="nav-link" href="{% url 'device_display' request.user.id %}">My Devices</a>

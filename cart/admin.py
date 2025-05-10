@@ -4,4 +4,4 @@ from cart.models import *
 admin.site.register(Divicecart)
 admin.site.register(Order)
 admin.site.register(Medcart)
-admin.site.register(MedicineOrder)
+# admin.site.register(MedicineOrder)

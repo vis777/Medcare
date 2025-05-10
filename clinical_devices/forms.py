@@ -21,15 +21,13 @@ class DeviceInformationForm(forms.ModelForm):
 class DeviceForm(forms.ModelForm):
     class Meta:
         model = DeviceInformation
-        fields = ["product_name","seller_name","description","product_image","phone","price"]
+        fields = ["product_name", "seller_name", "description", "product_image", "phone", "price", "quantity_available"]
         widgets = {
-        
-
             'product_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter name'}),
             'seller_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter seller name'}),
             'description': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter description'}),
-            'product_image': forms.ClearableFileInput(attrs={'class': 'form-control', 'placeholder': 'Select an image'}),
+            'product_image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
             'phone': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter phone number'}),
             'price': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter price'}),
-
+            'quantity_available': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter available quantity'}),
         }

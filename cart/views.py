@@ -12,6 +12,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from .models import Divicecart, Order
 from autherization.models import Customer 
+from django.db import transaction
+import razorpay
+import logging
 
 from django.http import HttpResponseBadRequest
 
@@ -82,6 +85,7 @@ def devremove_cart_item(request, id):
 
 def order_confirm_view(request):
     return render(request, "cart/order_confirm.html")
+
 
 
 def OrderForm(request):
@@ -155,6 +159,7 @@ def remove_cart_item(request, id):
     cart_item = get_object_or_404(Medcart, id=id, user=request.user)
     cart_item.delete()
     return redirect('med_cart_view')
+
 def med_cart_view(request):
     user = request.user
     cart = Medcart.objects.filter(user=user)
@@ -223,7 +228,7 @@ def med_cart_view(request):
 
 from django.shortcuts import render, redirect
 from django.db import transaction
-from .models import Medcart, MedicineOrder
+from .models import Medcart, Order
 from medicines.models import Medicine_inventory
 
 def MedorderForm(request):
@@ -240,10 +245,11 @@ def MedorderForm(request):
         try:
             with transaction.atomic():  # Ensure atomicity (all or nothing)
                 for item in cart:
+                    print(item)
                     total_price = item.quantity * item.medicine.price
 
                     # Create order
-                    MedicineOrder.objects.create(
+                    Order.objects.create(
                         user=user,
                         address=address,
                         phone=phone,
@@ -253,7 +259,6 @@ def MedorderForm(request):
                         total_price=total_price
                     )
 
-                    # Update stock
                     medicine = item.medicine
                     if medicine.quanity_availble >= item.quantity:
                         medicine.quanity_availble -= item.quantity
@@ -302,3 +307,147 @@ def itemcart_remove(request,id):
     except:
         pass
     return redirect('med_cart_view')
+
+@login_required
+def paymentpage(request, cart_type):
+    user = request.user
+    order_currency = "INR"
+    client = razorpay.Client(auth=("rzp_test_8ZlQ5ZrMiHMwmU", "f59o6eHBPsp6w3F2RW6ExcgZ"))
+
+    # Initialize payment variables
+    payment = None
+    total_price = 0
+
+    # Check if payment is for device cart or medicine cart
+    if cart_type == "device":
+        cart = Divicecart.objects.filter(user=user)
+        total_price = sum(i.quantity * i.device.price for i in cart)
+    elif cart_type == "medicine":
+        cart = Medcart.objects.filter(user=user)
+        total_price = sum(item.subtotal() for item in cart)
+    else:
+        messages.error(request, "Invalid cart type selected.")
+        return redirect("cart_view")
+
+    # Debugging
+    print(f"Cart Type: {cart_type}, Total Price: {total_price}")
+
+    if total_price == 0:
+        messages.error(request, f"Your {cart_type} cart is empty.")
+        return redirect("cart_view" if cart_type == "device" else "med_cart_view")
+
+    # Create a payment order for the selected cart
+    try:
+        payment = client.order.create({
+            "amount": int(total_price * 100),  # Razorpay accepts amount in paise
+            "currency": order_currency,
+            "payment_capture": "1",
+        })
+    except Exception as e:
+        messages.error(request, f"Payment Error: {e}")
+        return redirect("cart_view" if cart_type == "device" else "med_cart_view")
+
+    return render(
+        request,
+        "cart/Payment.html",
+        {
+            "razorpay_key": "rzp_test_W3mMQR6ikpp5sy",
+            "payment": payment,
+            "total": total_price,
+            "cart_type": cart_type,  # Pass cart type to the template
+        },
+    )
+
+
+logger = logging.getLogger(__name__)
+
+def payment_success(request):
+    """Handles post-payment logic after confirming payment."""
+    payment_id = request.GET.get("payment_id")
+
+    if not payment_id:
+        messages.error(request, "Payment verification failed! Please contact support.")
+        return redirect("customerpanel")
+
+    user = request.user
+    customer = Customer.objects.filter(user=user).first()  # Get associated customer details
+    device_cart_items = Divicecart.objects.filter(user=user)
+    med_cart_items = Medcart.objects.filter(user=user)
+
+    if not device_cart_items.exists() and not med_cart_items.exists():
+        messages.error(request, "No items in cart to process.")
+        return redirect("customerpanel")
+
+    order_items = []
+    total_price = 0
+
+    try:
+        with transaction.atomic():
+            # Process device orders
+            for item in device_cart_items:
+                device = get_object_or_404(DeviceInformation, id=item.device.id)
+
+                logger.info(f"Before: {device.product_name} stock = {device.quantity_available}")
+
+                if device.quantity_available < item.quantity:
+                    messages.error(request, f"Not enough stock for {device.product_name}.")
+                    return redirect("cart_view")
+
+                device.quantity_available -= item.quantity
+                device.save()
+
+                logger.info(f"After: {device.product_name} stock = {device.quantity_available}")
+
+                order_items.append({
+                    "Productname": device.product_name,
+                    "Quantity": item.quantity,
+                    "Total_Price": item.subtotal(),
+                })
+                total_price += item.subtotal()
+
+            # Process medicine orders
+            for item in med_cart_items:
+                medicine = get_object_or_404(Medicine_inventory, id=item.medicine.id)
+
+                logger.info(f"Before: {medicine.medicine_name} stock = {medicine.quanity_availble}")
+
+                if medicine.quanity_availble < item.quantity:
+                    messages.error(request, f"Not enough stock for {medicine.medicine_name}.")
+                    return redirect("med_cart_view")
+
+                medicine.quanity_availble -= item.quantity
+                medicine.save()
+
+                logger.info(f"After: {medicine.medicine_name} stock = {medicine.quanity_availble}")
+
+                order_items.append({
+                    "Productname": medicine.medicine_name,
+                    "Quantity": item.quantity,
+                    "Total_Price": item.subtotal(),
+                })
+                total_price += item.subtotal()
+
+            # Create an Order record
+            order = Order.objects.create(
+                user=user,
+                device=device_cart_items.first().device if device_cart_items.exists() else None,
+                medicine=med_cart_items.first().medicine if med_cart_items.exists() else None,
+                total_price=total_price,
+                no_of_items=len(order_items),
+                order_status="Processing",
+                delivary_status="Pending",
+                address=customer.address if customer else "No Address Provided",
+                phone=customer.phone if customer else None,
+            )
+
+            # Clear the cart after successful order placement
+            device_cart_items.delete()
+            med_cart_items.delete()
+
+        messages.success(request, "Payment successful! Your order has been placed.")
+        return render(request, "cart/payment_success.html", {"payment_id": payment_id, "order": order})
+
+    except Exception as e:
+        logger.error(f"Payment processing error: {str(e)}")
+        messages.error(request, f"An error occurred: {str(e)}")
+        return redirect("customerpanel")

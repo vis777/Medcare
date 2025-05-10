@@ -64,7 +64,7 @@
                 <ul class="dropdown">
                   <li><a href="{% url 'approved_nurses_list' %}">Home nurse</a></li>
                   
-                  <li><a href="{% url 'devicepanel' %}">Be a Seller?</a></li>
+                  <li><a href="{% url 'add_device' %}">Be a Seller?</a></li>
 
               
               </ul>
@@ -85,7 +85,7 @@
                 <li class="has-children">
                   <a href=""><i class="fa-solid fa-user"></i> {{ request.user.username }}</a>
                   <ul class="dropdown">
-                    <li><a href="#">View profile</a></li>
+                    {% comment %} <li><a href="#">View profile</a></li> {% endcomment %}
                     <li><a href="{% url 'logout_view' %}">Logout</a></li>
                 
                 </ul>

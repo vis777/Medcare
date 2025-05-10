@@ -69,11 +69,19 @@
             <nav class="site-navigation text-right text-md-center" role="navigation">
               <ul class="site-menu js-clone-nav d-none d-lg-block" style="margin-right: 320px;">
                 <li class="active"><a href="{% url 'nursepanel' %}">Home</a></li>
+                <li>
+                  {% if request.user.is_authenticated and request.user.pk %}
+                    <a href="{% url 'certificate_nurse' request.user.pk %}">Certificate</a>
+                  {% else %}
+                    <a href="#">Certificate</a> <!-- Or redirect to login -->
+                  {% endif %}
+                </li>
+
                 <!-- <li class="has-children">
                   <a href="#">Store</a>
                   <ul class="dropdown">
                     <li><a href="{% url 'listmedicines' %}">Medicines</a></li>
-                    <li><a href="{% url 'devicepanel' %}">Clinical Devices</a></li>
+                    <li><a href="">Clinical Devices</a></li>
                 
                 </ul>
               </li> -->

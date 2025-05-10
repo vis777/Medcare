@@ -21,4 +21,7 @@ urlpatterns=[
     path("cart/payment/", medorder_confirm_view, name="payment"),
     path("cart/itemremove/<int:id>/",itemcart_remove , name="itemremove"),
 
+    path('paymentpage/<str:cart_type>/', paymentpage, name='paymentpage'),
+    path("payment_success/", payment_success, name="payment_success"),
+
 ]

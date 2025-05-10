@@ -32,6 +32,7 @@
               <th scope="col">Description</th>
               <th scope="col">Phone</th>
               <th scope="col">Price</th>
+              <th scope="col">Quantity Available</th>
               <th scope="col">Edit</th>
               <th scope="col">Delete</th>
             </tr>
@@ -50,6 +51,7 @@
     <td>{{ device.description }}</td>
     <td>{{ device.phone }}</td>
     <td>₹{{ device.price }}</td>
+    <td>{{ device.quantity_available }}</td>
     <td><a href="{% url 'device_update' device.id %}"><i class="fa-solid fa-pen-to-square"></i></a></td>
     <td><a href="{% url 'device_delete' device.id %}"><i class="fa-solid fa-trash"></i></a></td>
 </tr>

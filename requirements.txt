@@ -125,7 +125,7 @@ srsly==2.5.2
 stripe==10.5.0
 svglib==1.6.0
 sympy==1.12
-thinc==8.2.1
+thinc==8.3.10
 tinycss2==1.4.0
 tinyhtml5==2.0.0
 tmdbv3api==1.9.0

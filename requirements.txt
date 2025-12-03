@@ -59,7 +59,7 @@ fsspec==2023.10.0
 googlemaps==4.2.0
 gunicorn==23.0.0
 html5lib==1.1
-httpagentparser==1.9.5
+httpagentparser==1.9.0
 hyperlink==21.0.0
 idna==3.8
 incremental==24.7.2

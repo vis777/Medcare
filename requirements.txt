@@ -90,7 +90,7 @@ pypdf==5.3.1
 pyphen==0.17.2
 python-bidi==0.6.6
 python-dateutil==2.9.0.post0
-python-http-client==3.3.7
+# python-http-client==3.3.7
 python3-openid==3.2.0
 pytz==2024.1
 PyYAML==6.0.2
@@ -101,7 +101,7 @@ regex==2025.11.3
 reportlab>=4.4.3
 requests==2.32.3
 requests-oauthlib==2.0.0
-sendgrid==6.11.0
+# sendgrid==6.11.0
 service-identity==24.1.0
 six==1.16.0
 smart-open==6.4.0

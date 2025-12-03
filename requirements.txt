@@ -56,7 +56,7 @@ djoser==2.2.3
 filelock==3.12.4
 fonttools==4.56.0
 fsspec==2023.10.0
-googlemaps==4.10.0
+googlemaps==4.2.0
 gunicorn==23.0.0
 html5lib==1.1
 httpagentparser==1.9.5

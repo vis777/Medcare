@@ -122,7 +122,7 @@ requests==2.32.3
 requests-oauthlib==2.0.0
 rlPyCairo==0.4.0
 sendgrid==6.11.0
-sendgrid-django==4.2.0
+# sendgrid-django==4.2.0
 service-identity==24.1.0
 six==1.16.0
 smart-open==6.4.0

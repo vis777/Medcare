@@ -63,7 +63,7 @@ html5lib==1.1
 hyperlink==21.0.0
 idna==3.8
 incremental==24.7.2
-ipapi==1.0.4
+ipapi==1.1.1
 Jinja2==3.1.2
 jsonfield==2.1.1
 langcodes==3.3.0

@@ -44,7 +44,6 @@ django-embed-video==1.4.10
 django-extensions==3.2.3
 django-js-asset==2.2.0
 django-mathfilters==1.0.0
-# django-ranged-response removed (not maintained)
 django-sendgrid-v5==1.2.3
 django-simple-captcha==0.6.0
 django-templated-mail==1.1.1
@@ -59,19 +58,15 @@ fsspec==2023.10.0
 googlemaps==4.2.0
 gunicorn==23.0.0
 html5lib==1.1
-# httpagentparser removed (not maintained)
 hyperlink==21.0.0
 idna==3.8
 incremental==24.7.2
-# ipapi==1.1.1
 Jinja2==3.1.2
 jsonfield==2.1.1
 langcodes==3.3.0
 lxml==5.3.1
-# MarkupSafe==2.1.3
 mpmath==1.3.0
 msgpack==1.1.0
-# murmurhash==1.0.10
 networkx==3.2
 numpy==2.3.5
 oauthlib==3.2.2
@@ -85,8 +80,8 @@ pyasn1==0.6.1
 pyasn1_modules==0.4.1
 pycountry==24.6.1
 pycparser==2.22
-pydantic==2.41.5
-# pydantic_core==2.41.5
+pydantic>=2.41.5
+pydantic-core>=2.41.5
 pydyf==0.11.0
 pyHanko==0.26.0
 pyhanko-certvalidator==0.26.7
@@ -121,7 +116,6 @@ spacy-loggers==1.0.5
 spacy-pkuseg==1.0.1
 sqlparse==0.5.3
 srsly==2.5.2
-# starkbank-ecdsa==2.2.0
 stripe==10.5.0
 svglib==1.6.0
 sympy==1.12
@@ -147,6 +141,6 @@ weasyprint==64.1
 webencodings==0.5.1
 whitenoise==6.8.2
 xhtml2pdf==0.2.17
-# zh-core-web-trf==3.8.0
+zh-core-web-trf @ https://github.com/explosion/spacy-models/releases/download/zh_core_web_trf-3.8.11/zh_core_web_trf-3.8.11-py3-none-any.whl
 zope.interface==7.0.3
 zopfli==0.2.3.post1

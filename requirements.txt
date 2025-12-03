@@ -80,7 +80,7 @@ packaging==24.2
 phonenumbers==8.13.45
 pillow==11.1.0
 preshed==3.0.12
-psycopg2-binary==2.9.9
+psycopg2-binary==2.9.11
 pyasn1==0.6.1
 pyasn1_modules==0.4.1
 pycountry==24.6.1

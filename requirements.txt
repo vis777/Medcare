@@ -44,7 +44,7 @@ django-embed-video==1.4.10
 django-extensions==3.2.3
 django-js-asset==2.2.0
 django-mathfilters==1.0.0
-# django-ranged-response==0.2.0
+# django-ranged-response removed (not maintained)
 django-sendgrid-v5==1.2.3
 django-simple-captcha==0.6.0
 django-templated-mail==1.1.1
@@ -59,7 +59,7 @@ fsspec==2023.10.0
 googlemaps==4.2.0
 gunicorn==23.0.0
 html5lib==1.1
-httpagentparser==1.9.0
+# httpagentparser removed (not maintained)
 hyperlink==21.0.0
 idna==3.8
 incremental==24.7.2
@@ -147,6 +147,6 @@ weasyprint==64.1
 webencodings==0.5.1
 whitenoise==6.8.2
 xhtml2pdf==0.2.17
-zh-core-web-trf @ https://github.com/explosion/spacy-models/releases/download/zh_core_web_trf-3.7.2/zh_core_web_trf-3.7.2-py3-none-any.whl#sha256=16b8d4bf23d20a04cfcbe676ae1be2be4437b40cf8101c9f3e7f6db4674ec91d
+zh-core-web-trf @ https://github.com/explosion/spacy-models/releases/download/zh_core_web_trf-3.7.2/zh_core_web_trf-3.7.2-py3-none-any.whl
 zope.interface==7.0.3
 zopfli==0.2.3.post1

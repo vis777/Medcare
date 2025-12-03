@@ -27,8 +27,6 @@ constantly==23.10.4
 crispy-bootstrap4==2024.1
 cryptography>=43.0.3
 cssselect2==0.8.0
-# curated-tokenizers==0.0.8
-# curated-transformers==0.1.1
 currencies==2020.12.12
 cymem==2.0.13
 daphne==4.1.2
@@ -49,9 +47,7 @@ django-embed-video==1.4.10
 django-extensions==3.2.3
 django-js-asset==2.2.0
 django-mathfilters==1.0.0
-# django-ranged-response==0.2.0
 django-sendgrid-v5==1.2.3
-# django-simple-captcha==0.6.0
 django-templated-mail==1.1.1
 django-tempus-dominus==5.1.2.17
 django-user-agents==0.4.0
@@ -67,21 +63,17 @@ groq==0.19.0
 gunicorn==23.0.0
 h11==0.14.0
 html5lib==1.1
-# httpagentparser==1.9.5
 httpcore==1.0.7
 httpx==0.28.1
 hyperlink==21.0.0
 idna==3.8
 incremental==24.7.2
-# ipapi==1.0.4
 Jinja2==3.1.2
 jsonfield==2.1.1
 langcodes==3.3.0
 lxml==6.0.2
-# MarkupSafe==2.1.3
 mpmath==1.3.0
 msgpack==1.1.0
-# murmurhash==1.0.10
 networkx==3.2
 numpy==2.3.5
 oauthlib==3.2.2
@@ -119,8 +111,6 @@ regex==2025.11.3
 reportlab==4.4.5
 requests==2.32.3
 requests-oauthlib==2.0.0
-# sendgrid==6.11.0
-# sendgrid-django==4.2.0
 service-identity==24.1.0
 six==1.16.0
 smart-open==6.4.0
@@ -129,13 +119,11 @@ social-auth-app-django==5.4.2
 social-auth-core==4.5.4
 soupsieve==2.5
 spacy==3.8.9
-# spacy-curated-transformers==0.2.0
 spacy-legacy==3.0.12
 spacy-loggers==1.0.5
 spacy_pkuseg==1.0.1
 sqlparse==0.5.3
 srsly==2.5.2
-# starkbank-ecdsa==2.2.0
 stripe==10.5.0
 svglib==1.6.0
 sympy==1.14.0
@@ -162,6 +150,5 @@ weasyprint==64.1
 webencodings==0.5.1
 whitenoise==6.8.2
 xhtml2pdf==0.2.17
-# zh-core-web-trf==3.7.2
 zope.interface==7.0.3
 zopfli==0.2.3.post1

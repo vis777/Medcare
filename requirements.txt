@@ -98,8 +98,8 @@ pyasn1_modules==0.4.1
 # pycairo==1.29.0
 pycountry==24.6.1
 pycparser==2.22
-pydantic==2.4.2
-pydantic-core>=0.0.1
+pydantic==2.5.0
+pydantic-core==2.20.1
 pydyf==0.11.0
 pyHanko
 pyhanko-certvalidator==0.26.7

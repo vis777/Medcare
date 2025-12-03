@@ -120,7 +120,7 @@ spacy-legacy==3.0.12
 spacy-loggers==1.0.5
 spacy-pkuseg==1.0.1
 sqlparse==0.5.3
-srsly==2.4.8
+srsly==2.5.2
 starkbank-ecdsa==2.2.0
 stripe==10.5.0
 svglib==1.5.1
@@ -147,6 +147,6 @@ weasyprint==64.1
 webencodings==0.5.1
 whitenoise==6.8.2
 xhtml2pdf==0.2.17
-zh-core-web-trf @ https://github.com/explosion/spacy-models/releases/download/zh_core_web_trf-3.7.2/zh_core_web_trf-3.7.2-py3-none-any.whl
+zh-core-web-trf @ https://github.com/explosion/spacy-models/releases/download/zh_core_web_trf-3.8.9/zh_core_web_trf-3.8.9-py3-none-any.whl
 zope.interface==7.0.3
 zopfli==0.2.3.post1

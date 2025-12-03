@@ -123,7 +123,7 @@ sqlparse==0.5.3
 srsly==2.5.2
 # starkbank-ecdsa==2.2.0
 stripe==10.5.0
-svglib==1.5.1
+svglib==1.6.0
 sympy==1.12
 thinc==8.2.1
 tinycss2==1.4.0
